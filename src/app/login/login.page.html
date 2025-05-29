@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="login-page">
+  <div class="login-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">Faça seu login!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form [formGroup]="loginForm">
+          <ion-item>
+            <ion-input formControlName="email" labelPlacement="floating" label="Email:" type="email"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input formControlName="password" placement="floating" label="Senha: "type="password"></ion-input>
+          </ion-item>
+        </form>
+        <div class="surround-button">
+          <ion-button [disabled]="loginForm.invalid">Login <ion-icon name="log-out-outline" slot="end"></ion-icon>
+</ion-button>
+          <ion-button> Registre-se</ion-button>
+        </div>
+        
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
