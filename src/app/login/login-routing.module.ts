@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LoginPage } from './login.page';
+import { FolderPage } from '../folder/folder.page';
 
 const routes: Routes = [
   {
     path: '',
     component: LoginPage
-  }
+  },
 ];
 
 @NgModule({

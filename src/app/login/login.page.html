@@ -13,16 +13,29 @@
       <ion-card-content>
         <form [formGroup]="loginForm">
           <ion-item>
-            <ion-input formControlName="email" labelPlacement="floating" label="Email:" type="email"></ion-input>
+            <ion-input formControlName="username" labelPlacement="floating" label="Nome ou apelido:" type="text"></ion-input>
+            <p>
+            @if(hasError('username', 'required')){
+              O campo nome ou apelido é obrigatório!
+            }
+            @if(hasError('username', 'minlength')){
+              O campo deve ter no mínimo 2 letras!
+            }
+            </p>
           </ion-item>
           <ion-item>
-            <ion-input formControlName="password" placement="floating" label="Senha: "type="password"></ion-input>
+            <ion-input formControlName="password" labelPlacement="floating" label="Senha: "type="password"></ion-input>
+            @if(hasError('password', 'required')){
+              O campo de senha é obrigatório!
+            }
+            @if(hasError('password', 'minlength')){
+              O campo deve ter no mínimo 6 digitos!
+            }
           </ion-item>
         </form>
         <div class="surround-button">
-          <ion-button [disabled]="loginForm.invalid">Login <ion-icon name="log-out-outline" slot="end"></ion-icon>
+          <ion-button [disabled]="loginForm.invalid" (click)="logar()">Login <ion-icon name="log-out-outline" slot="end"></ion-icon>
 </ion-button>
-          <ion-button> Registre-se</ion-button>
         </div>
         
       </ion-card-content>
