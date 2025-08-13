@@ -15,7 +15,7 @@ export class AuthService {
   }
 
   login(credentials: { username: string; password: string }): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.API_URL}/login`, credentials).pipe(
+    return this.http.post<{ token: string }>(`${this.API_URL}/auth/login`, credentials).pipe(
       tap(res => {
         localStorage.setItem('token', res.token);
         this.isLoggedIn$.next(true);
@@ -24,7 +24,7 @@ export class AuthService {
   }
 
   register(data: { username: string; email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.API_URL}/users`, data);
+    return this.http.post(`${this.API_URL}/auth/register`, data);
   }
 
   logout() {

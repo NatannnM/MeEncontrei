@@ -1,3 +1,43 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu contentId="main-content">
+    <ion-content>
+
+      <div class="menu-header">
+        <ion-avatar class="user-avatar">
+          <ion-icon name="person-circle-outline"></ion-icon>
+        </ion-avatar>
+        <div class="user-info">
+          <ion-label class="user-name">{{ userProfile.name }}</ion-label>
+          <ion-note class="user-role">{{ userProfile.role }}</ion-note>
+        </div>
+      </div>
+
+      <ion-list-header class="section-divider"></ion-list-header>
+
+      <ion-list class="navigation-list">
+        @for (p of appPages; track p) {
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button [routerLink]="[p.url]" routerDirection="root" routerLinkActive="selected" lines="none">
+            <ion-icon slot="start" [name]="p.icon" aria-hidden="true"></ion-icon>
+            <ion-label>{{ p.title }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        }
+      </ion-list>
+
+      <ion-list class="actions-list">
+        @for (p of actionPages; track p) {
+        <ion-menu-toggle auto-hide="false">
+          <ion-item button [routerLink]="[p.url]" routerDirection="root" routerLinkActive="selected" lines="none">
+            <ion-icon slot="start" [name]="p.icon" aria-hidden="true"></ion-icon>
+            <ion-label>{{ p.title }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        }
+      </ion-list>
+
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>

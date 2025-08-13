@@ -1,0 +1,49 @@
+.dir_text {
+  text-align: right;
+}
+
+.texto {
+  text-align: right;
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.grad {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.imagem ion-thumbnail {
+  --size: 200px;
+  --border-radius: 4px;
+}
+
+.imagem ion-thumbnail img {
+  width: 200%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+.conteudo {
+  flex: 1;
+  min-width: 0;
+}
+
+.conteudo ion-title,
+.conteudo p {
+  white-space: normal;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.conteudo ion-title {
+  margin-bottom: 8px;
+}

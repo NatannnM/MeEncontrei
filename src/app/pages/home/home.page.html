@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="section-container">
+    <div class="cards-wrapper">
+      <div *ngFor="let item of establishments" class="item-card">
+        <div class="item-card-image">
+          <img [src]="item.image" [alt]="item.title" />
+        </div>
+        <h3 class="item-card-title">{{ item.title }}</h3>
+        <p class="item-card-description">{{ item.description }}</p>
+      </div>
+    </div>
+    <h2 class="section-title" (click)="goToEstablishments()" tappable>Estabelecimentos</h2>
+  </div>
+  <div class="section-container">
+    <div class="cards-wrapper">
+      <div *ngFor="let item of events" class="item-card">
+        <div class="item-card-image">
+          <img [src]="item.image" [alt]="item.title" />
+        </div>
+        <h3 class="item-card-title">{{ item.title }}</h3>
+        <p class="item-card-description">{{ item.description }}</p>
+      </div>
+    </div>
+    <h2 class="section-title" (click)="goToEvents()" tappable>Eventos</h2>
+  </div>
+
+</ion-content>
