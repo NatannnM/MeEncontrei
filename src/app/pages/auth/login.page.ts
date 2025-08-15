@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MenuController, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
-import { AuthService } from './services/auth.services';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -24,13 +24,13 @@ export class LoginPage implements OnInit, ViewWillEnter, ViewWillLeave {
     private authService: AuthService,
     private router: Router
   ) { }
+
   ionViewWillEnter(): void {
     this.menuControl.enable(false);
   }
   ionViewWillLeave(): void {
     this.menuControl.enable(true);
   }
-
 
   logar() {
     let { value } = this.loginForm;
