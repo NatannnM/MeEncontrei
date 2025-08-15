@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Estabelecimentos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="linha">
+    <ion-item>
+      <ion-label class="texto" position="fixed">Pesquisar</ion-label>
+      <ion-input slot="end"></ion-input>
+    </ion-item>
+  </div>
+  <div class="dir_text">
+    <ion-button fill="clear" [routerLink]="['new']">
+      Criar Estabelecimento
+      <ion-icon slot="end" name="add-circle-outline"></ion-icon>
+    </ion-button>
+  </div>
+  <div *ngFor="let establishment of establishmentList" class="grad">
+    <div class="imagem">
+      <ion-thumbnail slot="start">
+
+        <img [alt]="establishment.title" [src]="establishment.image" />
+      </ion-thumbnail>
+    </div>
+    <div class="conteudo">
+
+      <ion-title>{{ establishment.title }}</ion-title>
+      <ion-text>
+
+        <p>
+          {{ establishment.text }}
+        </p>
+      </ion-text>
+    </div>
+  </div>
+
+</ion-content>

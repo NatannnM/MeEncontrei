@@ -12,6 +12,22 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/auth/auth.module').then(m => m.AuthModule)
   },
+  {
+    path: 'event',
+    loadChildren: () =>
+      import('./pages/event/event.module').then(m => m.EventPageModule)
+  },
+  {
+    path: 'establishment',
+    loadChildren: () =>
+      import('./pages/establishment/establishment.module').then(m => m.EstablishmentPageModule)
+  },
+  {
+    path: 'home',
+    loadChildren: () =>
+      import('./pages/home/home.module').then(m => m.HomePageModule)
+  },
+
   // {
   //   path: 'home/:id',
   //   loadChildren: () => import('./page/home/home.module').then(m => m.HomeModule)
