@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { EstablishmentPage } from './establishment.page';
 import { MaskitoDirective } from '@maskito/angular';
 import { EstablishmentPageRoutingModule } from './establishment-routing.module';
+import { EstablishmentDetailsComponent } from './establishment-details/establishment-details.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,8 @@ import { EstablishmentPageRoutingModule } from './establishment-routing.module';
     ReactiveFormsModule,
     EstablishmentPageRoutingModule
   ],
-  declarations: [EstablishmentPage]
+  declarations: [
+    EstablishmentPage
+  ]
 })
 export class EstablishmentPageModule { }
