@@ -1,0 +1,43 @@
+.establishment_header {
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.establishment_image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  object-position: 0% 30%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.establishment_title{
+
+  ion-card-title {
+    font-size: 2rem;
+    position: relative;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 2rem;
+  }
+
+}
+
+.establishment_info{
+  font-style: normal white;
+  margin-top: 0.5rem;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+ion-item {
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+
+}
+
+.center{
+  text-align: center;
+}

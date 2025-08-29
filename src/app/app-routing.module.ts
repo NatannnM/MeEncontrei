@@ -27,6 +27,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/home/home.module').then(m => m.HomePageModule)
   },
+  {
+    path: 'establishment-maps',
+    loadComponent: () =>
+      import('./pages/establishment/establishment-maps/establishment-maps.component').then(m => m.EstablishmentMapsComponent)
+  }
 
   // {
   //   path: 'home/:id',
