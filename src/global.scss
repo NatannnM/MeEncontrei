@@ -39,3 +39,29 @@
 ion-content {
   font-family: 'Roboto', sans-serif;
 }
+
+.sucess-toast {
+  --background: #28a745;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 8px 12px;
+  text-align: center;
+  display: inline-block;
+  min-width: auto;
+  max-width: 90%;
+}
+
+.failed-toast {
+  --background: red;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 8px 12px;
+  text-align: center;
+  display: inline-block;
+  min-width: auto;
+  max-width: 90%;
+}

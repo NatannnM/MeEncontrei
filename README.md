@@ -12,7 +12,7 @@ npm install -g @ionic/cli @angular/cli typescript
 
 ## Clonar:
 ```bash
-git clone https://github.com/luisartur8/projeto-teatro.git
+git clone https://github.com/NatannnM/MeEncontrei.git
 ```
 
 ## Instalar dependências:
