@@ -4,7 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { StartPage } from './start/start.page';
 
 const routes: Routes = [
-  { path: '', component: StartPage },
+  { path: '', 
+    component: StartPage 
+  },
   {
     path: 'login',
     loadChildren: () =>

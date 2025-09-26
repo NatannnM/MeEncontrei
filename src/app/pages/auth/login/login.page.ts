@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -10,18 +12,62 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
+  fUser = false;
+  fPass = false;
+
   username = '';
   password = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  loginForm: FormGroup = new FormGroup({
+    username: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required)
+  })
+
+  constructor(
+    private authService: AuthService, 
+    private router: Router, 
+    private toastController: ToastController
+  ) { }
 
   ngOnInit() { }
 
   onLogin() {
-    this.authService.login({ username: this.username, password: this.password }).subscribe({
-      next: () => this.router.navigate(['/home']),
-      error: err => console.error('Erro no login', err),
+    if(this.loginForm.invalid){
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    const {username, password} = this.loginForm.value;
+
+    this.authService.login({username, password }).subscribe({
+      next: () => {
+        this.toastController.create({
+          message: '✔️ Login efetuado com sucesso!',
+          duration: 1000,
+          position: 'bottom',
+          cssClass: 'toast-design'
+        }).then(toast => toast.present());
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        this.toastController.create({
+          message: 'Usuário ou senha inválidos',
+          duration: 1500,
+          color: 'danger',
+          position: 'bottom',
+          }).then(toast => toast.present())
+        console.error(err);
+      }
     });
+  }
+
+  goToRegister() {
+    this.router.navigate(['/auth/register']);
+  }
+
+  hasError(field: string, error: string) {
+    const control = this.loginForm.get(field);
+    return control?.touched && control.hasError(error);
   }
 
 }

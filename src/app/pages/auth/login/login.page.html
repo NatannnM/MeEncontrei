@@ -1,19 +1,32 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding login-content">
+  <div class="login-wrapper">
+    <h1 class="empresa-logo">MeEncontrei</h1>
+    <h2 class="login-title">Acesse sua conta!</h2>
 
-<ion-content class="ion-padding">
-  <ion-item>
-    <ion-label position="floating">Username</ion-label>
-    <ion-input [(ngModel)]="username" type="text"></ion-input>
-  </ion-item>
+    <form [formGroup] = "loginForm" class="form">
+      <div class="field" [class.has-value]="loginForm.get('username')?.value" [class.is-focused]="fUser">
+        <label class="field__label">Username</label>
+        <ion-input formControlName="username" name="username" type="text" (ionFocus)="fUser = true"
+          (ionBlur)="fUser = false">
+        </ion-input>
+      </div>
+    
 
-  <ion-item>
-    <ion-label position="floating">Senha</ion-label>
-    <ion-input [(ngModel)]="password" type="password"></ion-input>
-  </ion-item>
+      <div class="field" [class.has-value]="loginForm.get('password')?.value" [class.is-focused]="fPass">
+        <label class="field__label">Senha</label>
+        <ion-input formControlName="password" name="password" type="password" (ionFocus)="fPass = true"
+          (ionBlur)="fPass = false">
+        </ion-input>
+      </div>
 
-  <ion-button expand="block" (click)="onLogin()">Entrar</ion-button>
+      <div class="redirect-register-container">
+        <ion-text class="no-account-text">
+          Não tem uma conta?
+          <span class="direct-register" (click)="goToRegister()">Registre-se</span>
+        </ion-text>
+      </div>
+
+      <ion-button class="login-button" expand="block"  [disabled]="loginForm.invalid" (click)="onLogin()">Login</ion-button>
+    </form>
+  </div>
 </ion-content>
