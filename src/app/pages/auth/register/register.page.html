@@ -1,8 +1,44 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Registrar</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding register-content">
+  <div class="register-wrapper">
+    <h1 class="logo-aplicativo">MeEncontrei</h1>
+    <h2 class="register-title">Crie sua conta!</h2>
+
+    <form [formGroup]="usuarioForm" class="form">
+      <div class="field" [class.has-value]="usuarioForm.get('username')?.value" [class.is-focused]="fUser">
+        <label class="field__label">Nome do usuário</label>
+        <ion-input formControlName="username" name="username" type="text" (ionFocus)="fUser = true" 
+        (ionBlur)="fUser = false"></ion-input>
+      </div>
+
+      <div class="field" [class.has-value]="usuarioForm.get('email')?.value" [class.is-focused]="fEmail">
+        <label class="field__label">Email</label>
+        <ion-input formControlName="email" name="email" type="email" (ionFocus)="fEmail = true" 
+        (ionBlur)="fEmail = false"></ion-input>
+      </div>
+      
+      <div class="field" [class.has-value]="usuarioForm.get('password')?.value" [class.is-focused]="fPass">
+        <label class="field__label">Senha</label>
+        <ion-input formControlName="password" name="password" type="password" (ionFocus)="fPass = true" 
+        (ionBlur)="fPass = false"></ion-input>
+      </div>
+
+      <ion-button class="register-button" expand="block"  [disabled]="usuarioForm.invalid" (click)="onRegister()">Registrar</ion-button>
+    </form>
+  </div>
+</ion-content>
+
+<!--
+model User {
+  id            String   @id @default(uuid())
+  username      String   @unique
+  email         String   @unique
+  password_hash String
+  created_at    DateTime @default(now())
+  role          Role     @default(USER)
+  facilities    Facility[]
+
+  @@map("users")
+}
 
 <ion-content class="ion-padding">
   <ion-item>
@@ -21,4 +57,4 @@
   </ion-item>
 
   <ion-button expand="block" (click)="onRegister()">Registrar</ion-button>
-</ion-content>
+</ion-content> -->

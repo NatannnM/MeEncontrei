@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { EstablishmentPage } from './establishment.page';
 import { EstablishmentDetailsComponent } from './establishment-details/establishment-details.component';
 import { EstablishmentMapsComponent } from './establishment-maps/establishment-maps.component';
+import { EstablishmentFormComponent } from './establishment-form/establishment-form.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path:'details',
     component: EstablishmentDetailsComponent
+  },
+  {
+    path: 'new',
+    component: EstablishmentFormComponent
   }
 ];
 
