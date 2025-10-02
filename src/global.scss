@@ -40,17 +40,16 @@ ion-content {
   font-family: 'Roboto', sans-serif;
 }
 
-.sucess-toast {
-  --background: #28a745;
-  color: #fff;
-  font-weight: bold;
-  font-size: 14px;
-  border-radius: 8px;
-  padding: 8px 12px;
-  text-align: center;
-  display: inline-block;
-  min-width: auto;
-  max-width: 90%;
+.toast-design {
+  --background: #fcfcfc; /* Cor de fundo mais clara */
+  --color: #036b24;      /* Cor do texto */
+  --border-radius: 20px; /* Arredondamento das bordas */
+  --box-shadow: 0 0 0 3px #036b24, 0 6px 10px rgba(10, 9, 9, 0.2);
+  --max-width: fit-content;
+}
+
+ion-toast.toast-design::part(message) {
+  font-size: 18px;
 }
 
 .failed-toast {

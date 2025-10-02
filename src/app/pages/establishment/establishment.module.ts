@@ -9,6 +9,7 @@ import { EstablishmentPage } from './establishment.page';
 import { MaskitoDirective } from '@maskito/angular';
 import { EstablishmentPageRoutingModule } from './establishment-routing.module';
 import { EstablishmentDetailsComponent } from './establishment-details/establishment-details.component';
+import { EstablishmentFormComponent } from './establishment-form/establishment-form.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { EstablishmentDetailsComponent } from './establishment-details/establish
     EstablishmentPageRoutingModule
   ],
   declarations: [
-    EstablishmentPage
+    EstablishmentPage,
+    EstablishmentFormComponent
   ]
 })
 export class EstablishmentPageModule { }

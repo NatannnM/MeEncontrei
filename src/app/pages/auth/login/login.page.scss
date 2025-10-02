@@ -70,6 +70,13 @@
     flex-direction: column;
     gap: 20px;
 
+    .field-error {
+      font-size: 13px;
+      color: #e74c3c;
+      margin-top: 4px;
+      margin-left: 18px;
+    }
+
     .field {
       position: relative;
       overflow: visible;
@@ -95,6 +102,7 @@
         --highlight-color-focused: transparent;
         --highlight-color-valid: transparent;
         --highlight-color-invalid: transparent;
+        color: #000;
       }
 
       .field__label {

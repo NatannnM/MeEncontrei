@@ -3,18 +3,18 @@
     <h1 class="empresa-logo">MeEncontrei</h1>
     <h2 class="login-title">Acesse sua conta!</h2>
 
-    <form class="form">
-      <div class="field" [class.has-value]="usernameHasValue" [class.is-focused]="fUser">
+    <form [formGroup] = "loginForm" class="form">
+      <div class="field" [class.has-value]="loginForm.get('username')?.value" [class.is-focused]="fUser">
         <label class="field__label">Username</label>
-        <ion-input [(ngModel)]="username" name="username" type="text" (ionFocus)="fUser = true"
-          (ionBlur)="fUser = false" (ionInput)="checkValue($event, 'username')">
+        <ion-input formControlName="username" name="username" type="text" (ionFocus)="fUser = true"
+          (ionBlur)="fUser = false">
         </ion-input>
       </div>
 
-      <div class="field" [class.has-value]="passwordHasValue" [class.is-focused]="fPass">
+      <div class="field" [class.has-value]="loginForm.get('password')?.value" [class.is-focused]="fPass">
         <label class="field__label">Senha</label>
-        <ion-input [(ngModel)]="password" name="password" type="password" (ionFocus)="fPass = true"
-          (ionBlur)="fPass = false" (ionInput)="checkValue($event, 'password')">
+        <ion-input formControlName="password" name="password" type="password" (ionFocus)="fPass = true"
+          (ionBlur)="fPass = false">
         </ion-input>
       </div>
 
@@ -25,7 +25,7 @@
         </ion-text>
       </div>
 
-      <ion-button class="login-button" expand="block" (click)="onLogin()">Login</ion-button>
+      <ion-button class="login-button" expand="block"  [disabled]="loginForm.invalid" (click)="onLogin()">Login</ion-button>
     </form>
   </div>
 </ion-content>
