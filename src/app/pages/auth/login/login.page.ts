@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { ToastService } from 'src/app/services/notification.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
 
@@ -24,7 +23,11 @@ export class LoginPage implements OnInit {
     password: new FormControl('', Validators.required)
   })
 
-  constructor(private authService: AuthService, private router: Router, private toastController: ToastController) { }
+  constructor(
+    private authService: AuthService, 
+    private router: Router, 
+    private toastController: ToastController
+  ) { }
 
   ngOnInit() { }
 
