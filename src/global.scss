@@ -52,15 +52,7 @@ ion-toast.toast-design::part(message) {
   font-size: 18px;
 }
 
-.failed-toast {
-  --background: red;
-  color: #fff;
+ion-toast.toast-design::part(message) {
+  font-size: 18px;
   font-weight: bold;
-  font-size: 14px;
-  border-radius: 8px;
-  padding: 8px 12px;
-  text-align: center;
-  display: inline-block;
-  min-width: auto;
-  max-width: 90%;
 }
