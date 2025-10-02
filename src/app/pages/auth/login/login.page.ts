@@ -55,7 +55,7 @@ export class LoginPage implements OnInit {
           duration: 1500,
           color: 'danger',
           position: 'bottom',
-          }).then(toast => toast.present())
+        }).then(toast => toast.present())
         console.error(err);
       }
     });

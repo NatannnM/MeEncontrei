@@ -1,5 +1,5 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="secondary">
+<ion-header class="custom-header">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -7,36 +7,36 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="linha">
-    <ion-item>
-      <ion-label class="texto" position="fixed">Pesquisar</ion-label>
-      <ion-input slot="end"></ion-input>
-    </ion-item>
-  </div>
-  <div class="dir_text">
-    <ion-button fill="clear" [routerLink]="['new']">
-      Criar Evento
-      <ion-icon slot="end" name="add-circle-outline"></ion-icon>
+<ion-content [fullscreen]="true">
+
+
+  <div class="action-bar">
+    <ion-searchbar class="search-input" placeholder="Pesquisar eventos..."></ion-searchbar>
+    <ion-button class="create-button" [routerLink]="['new']">
+      <ion-icon slot="start" name="add"></ion-icon>
+      Criar Novo
     </ion-button>
   </div>
-  <div *ngFor="let event of eventList" class="grad">
-    <div class="imagem">
-      <ion-thumbnail slot="start">
 
-        <img [alt]="event.title" [src]="event.image" />
-      </ion-thumbnail>
-    </div>
-    <div class="conteudo">
 
-      <ion-title>{{ event.title }}</ion-title>
-      <ion-text>
+  <div class="event-list">
+    <ion-card *ngFor="let event of eventList" button>
+      <div class="card-inner-wrapper">
 
-        <p>
-          {{ event.text }}
-        </p>
-      </ion-text>
-    </div>
+        <img class="event-image" [alt]="event.title" [src]="event.image" />
+
+
+        <div class="event-content">
+          <ion-card-title>{{ event.title }}</ion-card-title>
+          <p class="event-description">
+            {{ event.text }}
+          </p>
+        </div>
+
+
+        <ion-icon class="card-action-icon" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+      </div>
+    </ion-card>
   </div>
 
 </ion-content>

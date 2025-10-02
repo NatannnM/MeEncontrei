@@ -24,11 +24,13 @@ export class RegisterPage implements OnInit {
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required)
   })
+
   constructor(
     private authService: AuthService, 
     private router: Router,
     private toastController: ToastController
   ) { }
+
 
   ngOnInit() { }
 

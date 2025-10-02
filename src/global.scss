@@ -50,5 +50,9 @@ ion-content {
 
 ion-toast.toast-design::part(message) {
   font-size: 18px;
+}
+
+ion-toast.toast-design::part(message) {
+  font-size: 18px;
   font-weight: bold;
 }

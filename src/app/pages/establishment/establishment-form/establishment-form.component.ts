@@ -16,6 +16,7 @@ export class EstablishmentFormComponent implements OnInit {
     owner: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
     photo_url: new FormControl('', Validators.required)
   })
+
   constructor() { }
 
   ngOnInit() { }

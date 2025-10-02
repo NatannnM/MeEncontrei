@@ -26,35 +26,3 @@
     </form>
   </div>
 </ion-content>
-
-<!--
-model User {
-  id            String   @id @default(uuid())
-  username      String   @unique
-  email         String   @unique
-  password_hash String
-  created_at    DateTime @default(now())
-  role          Role     @default(USER)
-  facilities    Facility[]
-
-  @@map("users")
-}
-
-<ion-content class="ion-padding">
-  <ion-item>
-    <ion-label position="floating">Username</ion-label>
-    <ion-input [(ngModel)]="username" type="text"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="floating">Email</ion-label>
-    <ion-input [(ngModel)]="email" type="email"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="floating">Senha</ion-label>
-    <ion-input [(ngModel)]="password" type="password"></ion-input>
-  </ion-item>
-
-  <ion-button expand="block" (click)="onRegister()">Registrar</ion-button>
-</ion-content> -->
