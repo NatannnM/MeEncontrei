@@ -1,5 +1,8 @@
 export type Establishment = {
-  image: string,
-  title: string,
-  text: string,
+  location: string,
+  name: string,
+  description: string,
+  owner: string,
+  photo_url: string,
+  image: String
 }

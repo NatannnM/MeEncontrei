@@ -25,6 +25,20 @@
           </p>
       </ion-item>
       <ion-item>
+        <ion-input formControlName="city" labelPlacement="floating" label= "Cidade:" type="text"></ion-input>
+          <p>
+            @if(hasError('city', 'required')){
+              O campo é obrigatório!
+            }
+            @if(hasError('city', 'minlength')){
+              O campo deve ter no mínimo 4 caracteres!
+            }
+            @if(hasError('city', 'maxlength')){
+              O campo deve ter no máximo 100 caracteres!
+            }
+          </p>
+      </ion-item>
+      <ion-item>
         <ion-input formControlName="name" labelPlacement="floating" label= "Nome:" type="text"></ion-input>
           <p>
             @if(hasError('name', 'required')){
@@ -68,9 +82,19 @@
       </ion-item>
 
       <ion-item>
-        <ion-input formControlName="photo_url" labelPlacement="floating" label= "Planta Baixa do Estabelecimento:" type="file"></ion-input>
+        <ion-input formControlName="photo" labelPlacement="floating" label= "Foto do Estabelecimento:" 
+          (change)="arquivoSelecionado($event, 'photo')" type="file"></ion-input>
           <p>
             @if(hasError('photo_url','required')){
+              O campo é obrigatório
+            }
+          </p>
+      </ion-item>
+      <ion-item>
+        <ion-input formControlName="map" labelPlacement="floating" label= "Planta Baixa do Estabelecimento:" 
+          (change)="arquivoSelecionado($event, 'map')" type="file"></ion-input>
+          <p>
+            @if(hasError('map','required')){
               O campo é obrigatório
             }
           </p>

@@ -10,6 +10,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { EstablishmentPageRoutingModule } from './establishment-routing.module';
 import { EstablishmentDetailsComponent } from './establishment-details/establishment-details.component';
 import { EstablishmentFormComponent } from './establishment-form/establishment-form.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { EstablishmentFormComponent } from './establishment-form/establishment-f
     MaskitoDirective,
     FormsModule,
     ReactiveFormsModule,
-    EstablishmentPageRoutingModule
+    EstablishmentPageRoutingModule,
+    HttpClientModule
   ],
   declarations: [
     EstablishmentPage,
