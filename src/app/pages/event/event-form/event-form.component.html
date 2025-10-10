@@ -1,5 +1,5 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="secondary">
+<ion-header [translucent]="true" class="custom-header">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -7,109 +7,110 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form [formGroup]="eventsForm" >
+<ion-content [fullscreen]="true">
+  <form [formGroup]="eventsForm">
     <ion-list>
       <ion-item>
-        <ion-input formControlName="owner" labelPlacement="floating" label= "Organizador(es):" type="text"></ion-input>
-          <p>
-            @if(hasError('owner', 'required')){
-              O campo é obrigatório!
-            }
-            @if(hasError('owner', 'minlength')){
-              O campo deve ter no mínimo 4 caracteres!
-            }
-            @if(hasError('owner', 'maxlength')){
-              O campo deve ter no máximo 60 caracteres!
-            }
-          </p>
+        <ion-input formControlName="owner" labelPlacement="floating" label="Organizador(es):" type="text"></ion-input>
+        <p>
+          @if(hasError('owner', 'required')){
+          O campo é obrigatório!
+          }
+          @if(hasError('owner', 'minlength')){
+          O campo deve ter no mínimo 4 caracteres!
+          }
+          @if(hasError('owner', 'maxlength')){
+          O campo deve ter no máximo 60 caracteres!
+          }
+        </p>
       </ion-item>
       <ion-item>
-        <ion-input formControlName="name" labelPlacement="floating" label= "Nome:" type="text"></ion-input>
-          <p>
-            @if(hasError('name', 'required')){
-              O campo é obrigatório!
-            }
-            @if(hasError('name', 'minlength')){
-              O campo deve ter no mínimo 2 caracteres!
-            }
-            @if(hasError('name', 'maxlength')){
-              O campo deve ter no máximo 255 caracteres!
-            }
-          </p>
+        <ion-input formControlName="name" labelPlacement="floating" label="Nome:" type="text"></ion-input>
+        <p>
+          @if(hasError('name', 'required')){
+          O campo é obrigatório!
+          }
+          @if(hasError('name', 'minlength')){
+          O campo deve ter no mínimo 2 caracteres!
+          }
+          @if(hasError('name', 'maxlength')){
+          O campo deve ter no máximo 255 caracteres!
+          }
+        </p>
       </ion-item>
       <ion-item>
-        <ion-input formControlName="address" labelPlacement="floating" label= "Endereço:" type="text"></ion-input>
-          <p>
-            @if(hasError('address', 'required')){
-              O campo é obrigatório!
-            }
-            @if(hasError('address', 'minlength')){
-              O campo deve ter no mínimo 20 caracteres!
-            }
-            @if(hasError('address', 'maxlength')){
-              O campo deve ter no máximo 255 caracteres!
-            }
-          </p>
+        <ion-input formControlName="address" labelPlacement="floating" label="Endereço:" type="text"></ion-input>
+        <p>
+          @if(hasError('address', 'required')){
+          O campo é obrigatório!
+          }
+          @if(hasError('address', 'minlength')){
+          O campo deve ter no mínimo 20 caracteres!
+          }
+          @if(hasError('address', 'maxlength')){
+          O campo deve ter no máximo 255 caracteres!
+          }
+        </p>
       </ion-item>
       <ion-item>
-        <ion-input formControlName="city" labelPlacement="floating" label= "Cidade:" type="text"></ion-input>
-          <p>
-            @if(hasError('city', 'required')){
-              O campo é obrigatório!
-            }
-            @if(hasError('city', 'minlength')){
-              O campo deve ter no mínimo 4 caracteres!
-            }
-            @if(hasError('city', 'maxlength')){
-              O campo deve ter no máximo 100 caracteres!
-            }
-          </p>
+        <ion-input formControlName="city" labelPlacement="floating" label="Cidade:" type="text"></ion-input>
+        <p>
+          @if(hasError('city', 'required')){
+          O campo é obrigatório!
+          }
+          @if(hasError('city', 'minlength')){
+          O campo deve ter no mínimo 4 caracteres!
+          }
+          @if(hasError('city', 'maxlength')){
+          O campo deve ter no máximo 100 caracteres!
+          }
+        </p>
       </ion-item>
-      
+
       <ion-item>
-        <ion-input formControlName="info" labelPlacement="floating" label= "Sobre o Evento:" type="text"></ion-input>
-          <p>
-            @if(hasError('info', 'required')){
-              O campo é obrigatório!
-            }
-            @if(hasError('info', 'minlength')){
-              O campo deve ter no mínimo 10 caracteres!
-            }
-            @if(hasError('info', 'maxlength')){
-              O campo deve ter no máximo 800 caracteres!
-            }
-          </p>
+        <ion-input formControlName="info" labelPlacement="floating" label="Sobre o Evento:" type="text"></ion-input>
+        <p>
+          @if(hasError('info', 'required')){
+          O campo é obrigatório!
+          }
+          @if(hasError('info', 'minlength')){
+          O campo deve ter no mínimo 10 caracteres!
+          }
+          @if(hasError('info', 'maxlength')){
+          O campo deve ter no máximo 800 caracteres!
+          }
+        </p>
       </ion-item>
-      
+
       <ion-item>
-        <ion-input formControlName="begin_date" labelPlacement="floating" label="Data de início do evento: " type="date"/>
+        <ion-input formControlName="begin_date" labelPlacement="floating" label="Data de início do evento: "
+          type="date" />
       </ion-item>
-      
+
       <ion-item>
-        <ion-input formControlName="end_date" labelPlacement="floating" label="Data do fim do evento: " type="date"/>
+        <ion-input formControlName="end_date" labelPlacement="floating" label="Data do fim do evento: " type="date" />
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Estabelecimentos</ion-label>
         <ion-select formControlName="id_facility" interface="popover">
           @for(establishment of establishment; track establishment){
-            <ion-select-option [value]="establishment">{{establishment.name}}</ion-select-option>
+          <ion-select-option [value]="establishment">{{establishment.name}}</ion-select-option>
           }
         </ion-select>
         <p>
           @if(hasError('establishment', 'required')){
-            O campo é obrigatório
+          O campo é obrigatório
           }
         </p>
         <ion-note slot="error" *ngIf="hasError('director', 'required')">Diretor é obrigatório</ion-note>
       </ion-item>
     </ion-list>
-    
+
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button [disabled]="eventsForm.invalid" (click)="save()">
         <ion-icon name="checkmark"></ion-icon>
       </ion-fab-button>
-    </ion-fab>  
+    </ion-fab>
   </form>
 </ion-content>
