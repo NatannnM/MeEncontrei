@@ -94,7 +94,7 @@
         <ion-label position="stacked">Estabelecimentos</ion-label>
         <ion-select formControlName="id_facility" interface="popover">
           @for(establishment of establishment; track establishment){
-            <ion-select-option [value]="establishment">{{establishment.name}}</ion-select-option>
+            <ion-select-option [value]="establishment.id">{{establishment.name}}</ion-select-option>
           }
         </ion-select>
         <p>
@@ -102,8 +102,25 @@
             O campo é obrigatório
           }
         </p>
-        <ion-note slot="error" *ngIf="hasError('director', 'required')">Diretor é obrigatório</ion-note>
+        <ion-note slot="error" *ngIf="hasError('establishment', 'required')">Estabelecimento é obrigatório</ion-note>
       </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Preço</ion-label>
+        <ion-input type="number" inputmode="decimal" formControlName="price">
+      </ion-input>
+
+      <ion-item>
+        <ion-input formControlName="photo" labelPlacement="floating" label= "Foto do Evento:" 
+          (change)="arquivoSelecionado($event)" type="file"></ion-input>
+          <p>
+            @if(hasError('photo_url','required')){
+              O campo é obrigatório
+            }
+          </p>
+      </ion-item>
+</ion-item>
+
     </ion-list>
     
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">

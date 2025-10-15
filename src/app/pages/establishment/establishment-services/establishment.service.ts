@@ -3,8 +3,12 @@ import { Injectable } from "@angular/core";
 import { environment as env } from "src/environments/environment";
 import { Establishment } from "../models/establishment.type";
 
-interface facilityResponse {
+interface facilitiesResponse {
     facility: Establishment[];
+}
+
+interface facilityResponse{
+    facility: Establishment;
 }
 
 @Injectable({
@@ -16,10 +20,12 @@ export class EstablishmentService {
 
     constructor(private http: HttpClient){}
 
-   
-
     getList(){
-        return this.http.get<facilityResponse>(this.API_URL);
+        return this.http.get<facilitiesResponse>(this.API_URL);
+    }
+
+    getById(establishmentId: string){
+        return this.http.get<facilityResponse>(`${this.API_URL}/${establishmentId}`)
     }
 
     private add(establishment: Establishment){

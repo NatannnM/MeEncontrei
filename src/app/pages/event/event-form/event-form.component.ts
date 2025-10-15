@@ -27,7 +27,9 @@ export class EventFormComponent implements OnInit {
     info: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(800)]), 
     begin_date: new FormControl('', [Validators.required]), 
     end_date: new FormControl('', [Validators.required]),
-    id_facility: new FormControl('', [Validators.required])
+    id_facility: new FormControl('', [Validators.required]),
+    price: new FormControl('', [Validators.required]),
+    photo: new FormControl('', Validators.required),
   })
 
   constructor(
@@ -49,8 +51,50 @@ export class EventFormComponent implements OnInit {
     });
   }
 
+  arquivoSelecionado(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64String = reader.result as string;
+
+        this.eventsForm.get('photo')?.setValue(base64String);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
   save(){
-    
+    let { value } = this.eventsForm;
+    this.eventsService.save({
+      ...value,
+    }).subscribe({
+      next:() => {
+        this.toastController.create({
+          message: 'Evento salvo com sucesso!',
+          duration: 3000,
+          position: 'bottom',
+          cssClass: 'toast-design'
+        }).then(toast => toast.present());
+        this.router.navigate(['/event']);
+      },
+      error: (error) => {
+        this.toastController.create({
+          message: error.error.message,
+          header: 'Erro ao salvar o evento' + value.nome + '!',
+          color: 'danger',
+          position: 'top',
+          buttons: [
+            { text: 'X', role: 'cancel'}
+          ]
+        }).then(toast => toast.present())
+          console.error(error);
+          console.error(error.error.details);
+      }
+    })
   }
 
   hasError(field: string, error: string) {

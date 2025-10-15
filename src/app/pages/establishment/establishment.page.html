@@ -20,7 +20,7 @@
 
 
   <div class="establishment-list">
-    <ion-card *ngFor="let establishment of pesquisaEstablishment;" button [routerLink]="['details']">
+    <ion-card *ngFor="let establishment of pesquisaEstablishment;" button [routerLink]="['details', establishment.id]">
       <div class="card-inner-wrapper">
 
         <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
