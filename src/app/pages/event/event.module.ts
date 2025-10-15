@@ -9,6 +9,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { EventPageRoutingModule } from './event-routing.module';
 import { EventPage } from './event.page';
 import { EventFormComponent } from './event-form/event-form.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { EventFormComponent } from './event-form/event-form.component';
     ReactiveFormsModule,
     RouterModule,
     IonicModule,
-    EventPageRoutingModule
+    EventPageRoutingModule,
+    HttpClientModule
   ],
   declarations: [
     EventPage,
