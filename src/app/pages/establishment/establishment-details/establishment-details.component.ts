@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { Establishment } from '../models/establishment.type';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { EstablishmentService } from '../establishment-services/establishment.service';
 
 @Component({
   selector: 'app-establishment-details',
@@ -13,10 +14,13 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class EstablishmentDetailsComponent  implements OnInit {
   
-  establishmentList: Establishment[] = [];
+  establishment!: Establishment;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private toastController: ToastController,
+    private establishmentService: EstablishmentService
   ) { 
     
   }
@@ -25,6 +29,24 @@ export class EstablishmentDetailsComponent  implements OnInit {
     this.router.navigate(['../establishment-maps']);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const establishmentId = this.activatedRoute.snapshot.params['id'];
+    this.establishmentService.getById(establishmentId).subscribe({
+      next: (response) => {
+        this.establishment = response.facility;
+      },
+      error: (error) => {
+        this.toastController.create({
+          message: error.error.message,
+          header: 'Erro ao carregar o estabelecimento!',
+          color: 'danger',
+          position: 'top',
+          duration: 3000,
+          }).then(toast => toast.present())
+          console.error(error);
+          console.error(error.error.details);
+      }  
+    });
+  }
 
 }

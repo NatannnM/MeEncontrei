@@ -1,5 +1,8 @@
 export type Event = {
+  id: string,
+  owner: string,
+  name: string,
+  info: string,
   image: string,
-  title: string,
-  text: string,
+  price: number,
 }

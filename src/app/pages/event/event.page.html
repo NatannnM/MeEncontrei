@@ -11,7 +11,7 @@
 
 
   <div class="action-bar">
-    <ion-searchbar class="search-input" placeholder="Pesquisar eventos..."></ion-searchbar>
+    <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisaEventos()" placeholder="Pesquisar eventos..."></ion-searchbar>
     <ion-button class="create-button" [routerLink]="['new']">
       <ion-icon slot="start" name="add"></ion-icon>
       Criar Novo
@@ -20,16 +20,16 @@
 
 
   <div class="event-list">
-    <ion-card *ngFor="let event of eventList" button>
+    <ion-card *ngFor="let event of pesquisaEvent;" button [routerLink]="['details', event.id]">
       <div class="card-inner-wrapper">
 
-        <img class="event-image" [alt]="event.title" [src]="event.image" />
+        <img class="event-image" [alt]="event.name" [src]="event.image" />
 
 
         <div class="event-content">
-          <ion-card-title>{{ event.title }}</ion-card-title>
+          <ion-card-title>{{ event.name }}</ion-card-title>
           <p class="event-description">
-            {{ event.text }}
+            {{ event.info }}
           </p>
         </div>
 
