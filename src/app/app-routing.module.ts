@@ -31,7 +31,15 @@ const routes: Routes = [
     path: 'establishment-maps',
     loadComponent: () =>
       import('./pages/establishment/establishment-maps/establishment-maps.component').then(m => m.EstablishmentMapsComponent)
+  },  {
+    path: 'users',
+    loadChildren: () => import('./pages/users/users.module').then( m => m.UsersPageModule)
+  },
+  {
+    path: 'user',
+    loadChildren: () => import('./pages/user/user.module').then( m => m.UserPageModule)
   }
+
 
   // {
   //   path: 'home/:id',
