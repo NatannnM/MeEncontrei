@@ -6,5 +6,5 @@ export type Establishment = {
   owner: string,
   photo: string,
   map: string,
-  image: String
+  image: string
 }

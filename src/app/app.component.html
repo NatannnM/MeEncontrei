@@ -1,17 +1,17 @@
 <ion-app>
-  <ion-menu contentId="main-content">
+  <ion-menu *ngIf="menuVisivel" contentId="main-content">
 
     <ion-content class="menu-content">
 
 
-      <div class="menu-header">
+      <div class="menu-header" [routerLink]="['user']" >
         <ion-avatar class="user-avatar">
 
           <ion-icon name="person-circle-outline"></ion-icon>
         </ion-avatar>
         <div class="user-info">
-          <span class="user-name">{{ userProfile.name }}</span>
-          <span class="user-role">{{ userProfile.role }}</span>
+          <span class="user-name">{{ user.username }}</span>
+          <span class="user-role">{{ user.role }}</span>
         </div>
       </div>
 
@@ -32,16 +32,26 @@
 
       <ion-list class="actions-list">
 
-        @for (p of actionPages; track p) {
+        <ng-container *ngFor="let p of actionPages">
+          <ng-container *ngIf="user?.role === 'USER'">
+            <ion-menu-toggle auto-hide="false" *ngIf="p.title != 'Administrador' ">
+              <ion-item button [routerLink]="[p.url]" routerDirection="root" routerLinkActive="selected" lines="none">
+                <ion-icon slot="start" [name]="p.icon" aria-hidden="true"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ng-container>
 
-        <ion-menu-toggle auto-hide="false">
-          <ion-item button [routerLink]="[p.url]" routerDirection="root" routerLinkActive="selected" lines="none">
-            <ion-icon slot="start" [name]="p.icon" aria-hidden="true"></ion-icon>
-            <ion-label>{{ p.title }}</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
+          <ng-container *ngIf="user?.role === 'ADMIN'">
+            <ion-menu-toggle auto-hide="false" >
+              <ion-item button [routerLink]="[p.url]" routerDirection="root" routerLinkActive="selected" lines="none">
+                <ion-icon slot="start" [name]="p.icon" aria-hidden="true"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ng-container>  
 
-        }
+        </ng-container>    
       </ion-list>
 
     </ion-content>
