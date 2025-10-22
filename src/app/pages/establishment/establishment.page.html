@@ -11,7 +11,8 @@
 
 
   <div class="action-bar">
-    <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisaEstabelecimentos()" placeholder="Pesquisar estabelecimentos..."></ion-searchbar>
+    <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisaEstabelecimentos()"
+      placeholder="Pesquisar estabelecimentos..."></ion-searchbar>
     <ion-button class="create-button" [routerLink]="['new']">
       <ion-icon slot="start" name="add"></ion-icon>
       Criar Novo
@@ -23,8 +24,9 @@
     <ion-card *ngFor="let establishment of pesquisaEstablishment;" button [routerLink]="['details', establishment.id]">
       <div class="card-inner-wrapper">
 
-        <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
-
+        <div class="image-container">
+          <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
+        </div>
         <div class="establishment-content">
 
           <ion-card-title>{{ establishment.name }}</ion-card-title>
