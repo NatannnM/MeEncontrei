@@ -3,10 +3,21 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment as env } from 'src/environments/environment';
 import { Storage } from '@ionic/storage-angular';
+import {jwtDecode} from 'jwt-decode';
+
+interface JWTPayload{
+  id: string;
+  username: string;
+  email: string;
+  created_at: Date;
+  role: 'ADMIN' | 'USER';
+  profile_pic: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
   private API_URL = env.apiURL;
   private storage: Storage | null = null;
@@ -26,7 +37,16 @@ export class AuthService {
 
   private async checkToken() {
     const token = await this.storage?.get('token');
-    this.isLoggedIn$.next(!!token);
+    if(token){
+      try{
+        await this.getUserData();
+        this.isLoggedIn$.next(true);
+      } catch(err){
+        await this.logout();
+      }
+    } else {
+      this.isLoggedIn$.next(false);
+    }
   }
 
   register(data: { username: string; email: string; password: string }): Observable<any> {
@@ -62,8 +82,14 @@ export class AuthService {
       throw new Error('Token não encontrado');
     }
 
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`)
-    return this.http.get(`${this.API_URL}/users`, { headers }).toPromise();
+    const decoded = jwtDecode<JWTPayload>(token);
+
+    if(!decoded.id){
+      throw new Error('Id não encontrado');
+    }
+    
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.API_URL}/users/${decoded.id}`, {headers}).toPromise();
   }
 
 

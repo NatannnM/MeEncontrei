@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AdminComponent } from './pages/user/admin/admin.component';
 
 const routes: Routes = [
   {
@@ -31,13 +32,14 @@ const routes: Routes = [
     path: 'establishment-maps',
     loadComponent: () =>
       import('./pages/establishment/establishment-maps/establishment-maps.component').then(m => m.EstablishmentMapsComponent)
-  },  {
-    path: 'users',
-    loadChildren: () => import('./pages/users/users.module').then( m => m.UsersPageModule)
   },
   {
     path: 'user',
     loadChildren: () => import('./pages/user/user.module').then( m => m.UserPageModule)
+  },
+  {
+    path: 'admin',
+    component: AdminComponent
   }
 
 
