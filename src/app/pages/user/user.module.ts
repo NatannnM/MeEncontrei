@@ -23,4 +23,4 @@ import { HttpClientModule } from '@angular/common/http';
     AdminComponent
   ]
 })
-export class UserPageModule {}
+export class UserPageModule { }
