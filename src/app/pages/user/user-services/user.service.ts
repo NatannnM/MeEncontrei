@@ -5,6 +5,7 @@ import { environment as env } from "src/environments/environment";
 import { AuthService } from "src/app/services/auth.service";
 import { from, Observable } from "rxjs";
 import { switchMap, map } from 'rxjs/operators';
+import { Storage } from "@ionic/storage-angular";
 
 interface usersResponse {
     user: User[];
@@ -20,8 +21,18 @@ export class userService{
 
     constructor(
         private http: HttpClient,
-        private authService: AuthService
+        private authService: AuthService,
+        private storage: Storage
     ){}
+
+    getById(userId: string): Observable<User>{
+        return from(this.authService.getToken()).pipe(
+            switchMap(token => {
+                const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);    
+                return this.http.get<User>(`${this.API_URL}/${userId}`, {headers});
+            })
+        )        
+    }
 
     getList(): Observable<User[]> {
         return from(this.authService.getToken()).pipe(
@@ -35,6 +46,10 @@ export class userService{
             }),
             map(response => response.user)
         );
+    }
+
+    remove(user: User){
+        return this.http.delete<User>(this.API_URL+user.id);
     }
 
    

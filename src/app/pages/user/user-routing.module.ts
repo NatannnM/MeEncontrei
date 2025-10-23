@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { UserPage } from './user.page';
-import { RegisterPage } from '../auth/register/register.page';
+import { UserFormComponent } from './user-form/user-form.component';
 
 const routes: Routes = [
   {
@@ -11,11 +11,11 @@ const routes: Routes = [
   },
   {
     path: 'edit/:id',
-    component: RegisterPage 
+    component: UserFormComponent
   },
   {
     path: 'new',
-    component: RegisterPage
+    component: UserFormComponent
   }
 ];
 

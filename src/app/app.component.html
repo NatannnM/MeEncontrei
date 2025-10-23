@@ -4,7 +4,7 @@
     <ion-content class="menu-content">
 
 
-      <div class="menu-header" [routerLink]="['user']" >
+      <div class="menu-header" (click)="goToUser('/user')">
         <ion-avatar class="user-avatar">
 
           <ion-icon name="person-circle-outline"></ion-icon>
