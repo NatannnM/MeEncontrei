@@ -24,6 +24,15 @@
           <p><strong>Administrador:</strong> {{ currentUser.role == 'ADMIN' ? 'Sim' : 'Não' }}</p>
         </div>
       </div>
+      <ion-button size="small" [routerLink]="['edit', currentUser.id]">
+          <ion-icon name="create" slot="start" ></ion-icon>
+          Editar
+      </ion-button>
+        
+      <ion-button size="small" (click)="remove(currentUser)">
+          <ion-icon name="trash" slot="end"></ion-icon>
+          Excluir
+      </ion-button>
 
     </ion-card-content>
   </ion-card>

@@ -23,7 +23,6 @@ export class AppComponent {
   ];
   public actionPages = [
     { title: 'Administrador', url: '/admin', icon: 'shield-checkmark' },
-    { title: 'Configurações', url: '/settings', icon: 'settings' },
     { title: 'Sair', url: 'auth/login', icon: 'exit' }
   ];
 
@@ -57,5 +56,10 @@ export class AppComponent {
     } catch(err) {
       console.error('Erro ao carregar dados do usuário', err);
     }
+  }
+
+  goToUser(url: string){
+    this.router.navigate([url]);
+    this.menuCtrl.close();
   }
 }

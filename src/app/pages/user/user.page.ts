@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from './models/user.type';
 import { AuthService } from 'src/app/services/auth.service';
-import { ViewWillEnter } from '@ionic/angular';
+import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { userService } from './user-services/user.service';
 
 @Component({
   selector: 'app-user',
@@ -16,7 +17,9 @@ export class UserPage implements OnInit, ViewWillEnter {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private userService: userService,
+    private toastController: ToastController
   ) { }
 
   async ionViewWillEnter(): Promise<void> {
@@ -35,6 +38,47 @@ export class UserPage implements OnInit, ViewWillEnter {
     } catch (err) {
       console.error('Erro ao carregar usuário:', err);
     }
+  }
+
+  async remove(user: User){
+    const toast = await this.toastController.create({
+      message: `${user.username}, tem certeza que deseja apagar sua conta?`,
+      position: 'bottom',
+      buttons: [
+        {
+          side: 'end',
+          text: 'confirmar',
+          handler: () => {
+            this.userService.remove(user).subscribe({
+              next: () => {
+                this.exibirToast('Conta excluída com sucesso!');
+                this.router.navigate(['/login']);
+              },
+              error: (err) => {
+                this.exibirToast('Ocorreu um erro ao remover usuário.');
+              }
+            });
+          }
+        },
+        {
+          side: 'start',
+          text: 'cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await toast.present();
+  }
+
+  async exibirToast(message: string){
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      position: 'bottom',
+      cssClass: 'toast-design'
+    });
+    toast.present();
   }
 
   ngOnInit() {
