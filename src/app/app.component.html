@@ -10,8 +10,8 @@
           <ion-icon name="person-circle-outline"></ion-icon>
         </ion-avatar>
         <div class="user-info">
-          <span class="user-name">{{ user.username }}</span>
-          <span class="user-role">{{ user.role }}</span>
+          <span class="user-name">{{ user?.username }}</span>
+          <span class="user-role">{{ user?.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</span>
         </div>
       </div>
 

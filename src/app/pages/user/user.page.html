@@ -11,8 +11,8 @@
   <ion-card>
     <ion-card-content>
       <div class="profile-container">
-        @if(currentUser.image){
-          <img [alt]="currentUser.username" [src]="currentUser.image" class="profile-photo"/>
+        @if(currentUser.profile_pic){
+          <img [alt]="currentUser.username" [src]="currentUser.profile_pic" class="profile-photo"/>
         } @else {
           <img alt="Sem Capa" src="https://placehold.co/400"class="profile-photo"/>
         }
@@ -32,6 +32,16 @@
       <ion-button size="small" (click)="remove(currentUser)">
           <ion-icon name="trash" slot="end"></ion-icon>
           Excluir
+      </ion-button>
+      <h2>Gerenciar estabelecimentos ou eventos cadastrados</h2>
+      <ion-button size="small" [routerLink]="['edit', currentUser.id]">
+          <ion-icon name="business" slot="start" ></ion-icon>
+          Estabelecimentos
+      </ion-button>
+        
+      <ion-button size="small" (click)="remove(currentUser)">
+          <ion-icon name="calendar" slot="end"></ion-icon>
+          Eventos
       </ion-button>
 
     </ion-card-content>

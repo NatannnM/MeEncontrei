@@ -13,7 +13,7 @@ import { filter } from 'rxjs/operators';
 })
 export class AppComponent {
 
-  user!: User;
+  user: User | null = null;
   menuVisivel = true;
 
   public appPages = [
