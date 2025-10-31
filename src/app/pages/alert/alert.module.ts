@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
 import { MaskitoDirective } from "@maskito/angular";
 import { alertFormComponent } from "./alert-form.component";
+import { UserAlertComponent } from "./user-alert.component";
 
 @NgModule({
   imports: [
@@ -17,8 +18,9 @@ import { alertFormComponent } from "./alert-form.component";
     HttpClientModule
   ],
   declarations: [
-    alertFormComponent
+    alertFormComponent,
+    UserAlertComponent
   ],
-  exports: [alertFormComponent]
+  exports: [alertFormComponent, UserAlertComponent]
 })
 export class alertPageModule { }
