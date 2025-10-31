@@ -14,7 +14,6 @@ import { userService } from './user-services/user.service';
 export class UserPage implements OnInit, ViewWillEnter {
   currentUser: User | undefined;
 
-
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -52,7 +51,7 @@ export class UserPage implements OnInit, ViewWillEnter {
             this.userService.remove(user).subscribe({
               next: () => {
                 this.exibirToast('Conta excluída com sucesso!');
-                this.router.navigate(['/login']);
+                this.router.navigate(['../auth']);
               },
               error: (err) => {
                 this.exibirToast('Ocorreu um erro ao remover usuário.');
@@ -61,7 +60,7 @@ export class UserPage implements OnInit, ViewWillEnter {
           }
         },
         {
-          side: 'start',
+          side: 'end',
           text: 'cancelar',
           role: 'cancel'
         }

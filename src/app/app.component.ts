@@ -13,7 +13,7 @@ import { filter } from 'rxjs/operators';
 })
 export class AppComponent {
 
-  user!: User;
+  user: User | null = null;
   menuVisivel = true;
 
   public appPages = [
@@ -56,6 +56,11 @@ export class AppComponent {
     } catch(err) {
       console.error('Erro ao carregar dados do usuário', err);
     }
+  }
+
+  async deslogar() {
+    await this.authService.logout();
+    this.router.navigate(['auth/login']);
   }
 
   goToUser(url: string){

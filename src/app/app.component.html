@@ -10,8 +10,8 @@
           <ion-icon name="person-circle-outline"></ion-icon>
         </ion-avatar>
         <div class="user-info">
-          <span class="user-name">{{ user.username }}</span>
-          <span class="user-role">{{ user.role }}</span>
+          <span class="user-name">{{ user?.username }}</span>
+          <span class="user-role">{{ user?.role === 'ADMIN' ? 'Administrador' : 'Usuário' }}</span>
         </div>
       </div>
 
@@ -35,7 +35,8 @@
         <ng-container *ngFor="let p of actionPages">
           <ng-container *ngIf="user?.role === 'USER'">
             <ion-menu-toggle auto-hide="false" *ngIf="p.title != 'Administrador' ">
-              <ion-item button [routerLink]="[p.url]" routerDirection="root" routerLinkActive="selected" lines="none">
+              <ion-item button (click)="p.title === 'Sair' && deslogar()" [routerLink]="p.title !== 'Sair' ? [p.url] : []"
+               routerDirection="root" routerLinkActive="selected" lines="none">
                 <ion-icon slot="start" [name]="p.icon" aria-hidden="true"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
@@ -44,7 +45,8 @@
 
           <ng-container *ngIf="user?.role === 'ADMIN'">
             <ion-menu-toggle auto-hide="false" >
-              <ion-item button [routerLink]="[p.url]" routerDirection="root" routerLinkActive="selected" lines="none">
+              <ion-item button (click)="p.title === 'Sair' ? deslogar() : null" 
+                [routerLink]="p.title !== 'Sair' ? [p.url] : []" routerDirection="root" routerLinkActive="selected" lines="none">
                 <ion-icon slot="start" [name]="p.icon" aria-hidden="true"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>

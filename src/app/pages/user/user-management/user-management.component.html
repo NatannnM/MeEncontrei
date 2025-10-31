@@ -1,0 +1,53 @@
+<ion-header class="custom-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Gerenciar {{ opcao === 'estabelecimento' ? 'Estabelecimentos' : 'Eventos'}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="action-bar">
+    <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisaEstabelecimentos()"
+      placeholder="Pesquisar estabelecimentos..."></ion-searchbar>
+  </div>
+
+  <div class="establishment-list">
+    <ion-card *ngFor="let establishment of pesquisaEstablishment;">
+      <div class="card-inner-wrapper"  *ngIf="user.id === establishment.id_user">
+
+        <div class="image-container">
+          <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
+        </div>
+        <div class="establishment-content">
+
+          <ion-card-title>{{ establishment.name }}</ion-card-title>
+
+          <ion-button size="small" [routerLink]="['../../editEstablishment', establishment.id_facility]">
+            <ion-icon name="create" slot="start" ></ion-icon>
+            Editar
+          </ion-button>
+
+          <ion-button size="small" (click)="remove(establishment.id_facility)" >
+            <ion-icon name="trash" slot="start" ></ion-icon>
+            Apagar
+          </ion-button>
+
+          <ion-button size="small" [routerLink]="['management', 'estabelecimento']">
+            <ion-icon name="create" slot="start" ></ion-icon>
+            Usuários
+          </ion-button>
+
+          <ion-button expand="full" (click)="openModal(establishment.id_facility)">
+            <ion-icon name="trash" slot="start" ></ion-icon>
+            Avisos
+          </ion-button>
+
+        </div>
+
+      </div>
+    </ion-card>
+  </div>
+</ion-content>

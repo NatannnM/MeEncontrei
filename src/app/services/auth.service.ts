@@ -77,7 +77,6 @@ export class AuthService {
 
   async getUserData(): Promise<any> {
     const token = await this.getToken();
-
     if(!token){
       throw new Error('Token não encontrado');
     }
@@ -91,6 +90,5 @@ export class AuthService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get(`${this.API_URL}/users/${decoded.id}`, {headers}).toPromise();
   }
-
 
 }

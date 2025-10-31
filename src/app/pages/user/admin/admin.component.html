@@ -11,8 +11,8 @@
   <ion-card>
     <ion-card-content>
       <div class="profile-container">
-        @if(currentUser.image){
-          <img [alt]="currentUser.username" [src]="currentUser.image" class="profile-photo"/>
+        @if(currentUser.profile_pic){
+          <img [alt]="currentUser.username" [src]="currentUser.profile_pic" class="profile-photo"/>
         } @else {
           <img alt="Sem Capa" src="https://placehold.co/400"class="profile-photo"/>
         }
