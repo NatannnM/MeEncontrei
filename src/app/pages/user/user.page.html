@@ -8,42 +8,67 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="currentUser">
-  <ion-card>
-    <ion-card-content>
-      <div class="profile-container">
-        @if(currentUser.profile_pic){
-          <img [alt]="currentUser.username" [src]="currentUser.profile_pic" class="profile-photo"/>
-        } @else {
-          <img alt="Sem Capa" src="https://placehold.co/400"class="profile-photo"/>
-        }
+  <div class="profile-content-wrapper">
+    <ion-card class="profile-card">
+      <ion-card-content>
 
-        <div class="profile-details">
-          <h2>{{ currentUser.username }}</h2>
-          <p><strong>Email:</strong> {{ currentUser.email }}</p>
-          
-          <p><strong>Administrador:</strong> {{ currentUser.role == 'ADMIN' ? 'Sim' : 'Não' }}</p>
+        <div class="profile-section">
+          <div class="profile-photo-wrapper">
+            @if(currentUser.profile_pic){
+            <img [alt]="currentUser.username" [src]="currentUser.profile_pic" class="profile-photo" />
+            } @else {
+
+            <ion-icon name="person-circle-outline" class="profile-photo-fallback"></ion-icon>
+            }
+          </div>
+
+          <div class="profile-details">
+            <h1 class="ion-no-margin">{{ currentUser.username }}</h1>
+            <p class="detail-item">
+              <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+              {{ currentUser.email }}
+            </p>
+            <p class="detail-item">
+              <ion-icon name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
+              <strong>Administrador:</strong> {{ currentUser.role == 'ADMIN' ? 'Sim' : 'Não' }}
+            </p>
+          </div>
         </div>
-      </div>
-      <ion-button size="small" [routerLink]="['edit', currentUser.id]">
-          <ion-icon name="create" slot="start" ></ion-icon>
-          Editar
-      </ion-button>
-        
-      <ion-button size="small" (click)="remove(currentUser)">
-          <ion-icon name="trash" slot="end"></ion-icon>
-          Excluir
-      </ion-button>
-      <h2>Gerenciar estabelecimentos ou eventos cadastrados</h2>
-      <ion-button size="small" [routerLink]="['management', 'estabelecimento']">
-          <ion-icon name="business" slot="start" ></ion-icon>
-          Estabelecimentos
-      </ion-button>
-        
-      <ion-button size="small" [routerLink]="['management', 'evento']">
-          <ion-icon name="calendar" slot="end"></ion-icon>
-          Eventos
-      </ion-button>
 
-    </ion-card-content>
-  </ion-card>
+
+        <div class="profile-actions">
+          <ion-button expand="block" [routerLink]="['edit', currentUser.id]">
+            <ion-icon name="create" slot="start"></ion-icon>
+            Editar Perfil
+          </ion-button>
+
+          <ion-button expand="block" color="danger" (click)="remove(currentUser)">
+            <ion-icon name="trash" slot="start"></ion-icon>
+            Excluir Conta
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+
+    <ion-card class="management-card">
+      <ion-card-header>
+        <ion-card-title>Gerenciar Conteúdo</ion-card-title>
+        <ion-card-subtitle>Estabelecimentos e Eventos</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="management-actions">
+          <ion-button expand="block" fill="solid" [routerLink]="['management', 'estabelecimento']">
+            <ion-icon name="business" slot="start"></ion-icon>
+            Meus Estabelecimentos
+          </ion-button>
+
+          <ion-button expand="block" fill="solid" [routerLink]="['management', 'evento']">
+            <ion-icon name="calendar" slot="start"></ion-icon>
+            Meus Eventos
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
