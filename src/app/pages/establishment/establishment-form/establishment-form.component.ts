@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EstablishmentService } from '../establishment-services/establishment.service';
 import { ToastController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from '../../user/models/user.type';
 
 @Component({
   selector: 'app-establishment-form',
@@ -11,7 +13,7 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class EstablishmentFormComponent implements OnInit {
-
+  
   establishmentForm: FormGroup = new FormGroup ({
     location: new FormControl('', [Validators.required, Validators.minLength(20), Validators.maxLength(255)]),
     city: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(100)]),
@@ -19,15 +21,50 @@ export class EstablishmentFormComponent implements OnInit {
     description: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(800)]),
     owner: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
     photo: new FormControl('', Validators.required),
-    map: new FormControl('', Validators.required)
-  })
+    map: new FormControl('', Validators.required),
+    public: new FormControl(''),
+  });
+  
+  user: User | null = null;
+  establishmentId!: string;
 
   constructor(
     private establishmentService: EstablishmentService,
     private router: Router,
     private toastController: ToastController,
-
-  ) { }
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
+  ) { 
+    const establishmentId = this.activatedRoute.snapshot.params['id_facility'];
+    if(establishmentId){
+      this.establishmentService.getById(establishmentId).subscribe({
+        next: (response) => {
+          if(response && response.facility){
+            this.establishmentId = establishmentId;
+            this.establishmentForm.setValue({
+              location: response.facility.location,
+              city: response.facility.city,
+              name: response.facility.name,
+              description: response.facility.description,
+              owner:response.facility.owner,
+              photo: '',
+              map: '',
+              public: ''
+            });
+          }
+        },
+        error: (error) => {
+          this.toastController.create({
+            message: error.error.message,
+            header: 'Erro ao carregar estabelecimento!',
+            color: 'danger',
+            duration: 3000,
+          }).then(toast => toast.present())
+        }
+      })
+      this.carregarUsuario();
+    }
+  }
 
   ngOnInit() { }
 
@@ -47,10 +84,23 @@ export class EstablishmentFormComponent implements OnInit {
     }
   }
 
+  async carregarUsuario(){
+    try {
+      const dadosUsuario = await this.authService.getUserData();
+      this.user = dadosUsuario.user;
+    } catch(err) {
+      console.error('Erro ao carregar dados do usuário', err);
+    }
+  }
+
   save(){
     let { value } = this.establishmentForm;
+    if(this.user?.role != 'ADMIN'){
+      value.public = 'PRIVATE';
+    }
     this.establishmentService.save({
       ...value,
+      id: this.establishmentId
     }).subscribe({
       next:() => {
         this.toastController.create({
@@ -59,7 +109,11 @@ export class EstablishmentFormComponent implements OnInit {
           position: 'bottom',
           cssClass: 'toast-design'
         }).then(toast => toast.present());
-        this.router.navigate(['/establishment']);
+        if(this.establishmentId){
+          this.router.navigate(['user']);
+        } else {
+          this.router.navigate(['/establishment']);
+        }
       },
       error: (error) => {
         console.log(value);

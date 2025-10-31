@@ -20,7 +20,7 @@ export class EstablishmentUserService{
     }
 
     getByUserId(user_id: string): Observable<EstablishmentUser[]>{
-        return this.http.get<EstablishmentUser[]>(`${this.API_URL}/${user_id}`);
+        return this.http.get<EstablishmentUser[]>(`${this.API_URL}/user/${user_id}`);
     }
 
     getByFacilityId(facility_id: string): Observable<EstablishmentUser[]>{

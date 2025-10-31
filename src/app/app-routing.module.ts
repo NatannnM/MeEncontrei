@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './pages/user/admin/admin.component';
+import { UserManagementComponent } from './pages/user/user-management/user-management.component';
+import { alertFormComponent } from './pages/alert/alert-form.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,14 @@ const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent
+  },
+  {
+    path: 'user/user-management',
+    component: UserManagementComponent
+  },
+  {
+    path: 'alert',
+    component: alertFormComponent
   }
 
 

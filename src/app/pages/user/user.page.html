@@ -34,12 +34,12 @@
           Excluir
       </ion-button>
       <h2>Gerenciar estabelecimentos ou eventos cadastrados</h2>
-      <ion-button size="small" [routerLink]="['edit', currentUser.id]">
+      <ion-button size="small" [routerLink]="['management', 'estabelecimento']">
           <ion-icon name="business" slot="start" ></ion-icon>
           Estabelecimentos
       </ion-button>
         
-      <ion-button size="small" (click)="remove(currentUser)">
+      <ion-button size="small" [routerLink]="['management', 'evento']">
           <ion-icon name="calendar" slot="end"></ion-icon>
           Eventos
       </ion-button>

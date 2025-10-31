@@ -19,7 +19,8 @@ export class EstablishmentPage implements OnInit, ViewDidEnter{
   constructor(
     private authService: AuthService,
     private router: Router,
-    private establishmentService: EstablishmentService
+    private establishmentService: EstablishmentService,
+    private toastController: ToastController
   ) {
    }
 
@@ -30,8 +31,15 @@ export class EstablishmentPage implements OnInit, ViewDidEnter{
         this.pesquisaEstablishment = [...this.establishmentList];
       },
       error: (error) => {
-        alert('Erro ao carregar lista de estabelecimentos');
-        console.error(error);
+        this.toastController.create({
+          message: error.error.message,
+          header: 'Erro ao carregar lista de estabelecimentos',
+          color: 'danger',
+          position: 'top',
+          duration: 3000
+          }).then(toast => toast.present())
+          console.error(error);
+          console.error(error.error.details);
       }  
     });
   }

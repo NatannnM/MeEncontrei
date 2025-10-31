@@ -58,6 +58,11 @@ export class AppComponent {
     }
   }
 
+  async deslogar() {
+    await this.authService.logout();
+    this.router.navigate(['auth/login']);
+  }
+
   goToUser(url: string){
     this.router.navigate([url]);
     this.menuCtrl.close();

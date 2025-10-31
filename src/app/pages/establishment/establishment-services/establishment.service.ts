@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { environment as env } from "src/environments/environment";
 import { Establishment } from "../models/establishment.type";
 import { AuthService } from "src/app/services/auth.service";
-import { from, switchMap } from "rxjs";
+import { from, Observable, switchMap } from "rxjs";
 
 interface facilitiesResponse {
     facility: Establishment[];
@@ -38,12 +38,25 @@ export class EstablishmentService {
         return this.http.post<Establishment>(this.API_URL, establishmentComId);
     }
 
+    private update(establishment: Establishment): Observable<any>{
+        return this.http.patch<Establishment>(`${this.API_URL}/${establishment.id}`, establishment);
+    }
+
     save(establishment: Establishment){
-        return from(this.authService.getUserData()).pipe(
-            switchMap(userData => {
-                const userId = userData.user.id;
-                return this.add(establishment, userId);
-            })
-        )
+        console.log(establishment);
+        if(establishment.id){
+            return this.update(establishment);    
+        } else {
+            return from(this.authService.getUserData()).pipe(
+                switchMap(userData => {
+                    const userId = userData.user.id;
+                    return this.add(establishment, userId);
+                })
+            )
+        }
+    }
+
+    remove(establishmentId: string): Observable<any>{
+        return this.http.delete<any>(`${this.API_URL}/${establishmentId}`);
     }
 }
