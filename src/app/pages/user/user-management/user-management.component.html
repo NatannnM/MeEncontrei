@@ -35,13 +35,13 @@
             Apagar
           </ion-button>
 
-          <ion-button size="small" [routerLink]="['management', 'estabelecimento']">
-            <ion-icon name="create" slot="start" ></ion-icon>
+          <ion-button size="small" (click)="openModalUsers(establishment.id_facility)">
+            <ion-icon name="people" slot="start" ></ion-icon>
             Usuários
           </ion-button>
 
           <ion-button expand="full" (click)="openModal(establishment.id_facility)">
-            <ion-icon name="trash" slot="start" ></ion-icon>
+            <ion-icon name="alert-circle" slot="start" ></ion-icon>
             Avisos
           </ion-button>
 

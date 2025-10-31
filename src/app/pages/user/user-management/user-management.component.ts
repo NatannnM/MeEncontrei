@@ -9,6 +9,7 @@ import { User } from '../models/user.type';
 import { EstablishmentUser } from '../../establishment/models/establishmentUser.type';
 import { firstValueFrom } from 'rxjs';
 import { alertFormComponent } from '../../alert/alert-form.component';
+import { UserAlertComponent } from '../../alert/user-alert.component';
 
 interface EstablishmentData {
   id_facility: string;
@@ -149,6 +150,16 @@ export class UserManagementComponent  implements OnInit, ViewDidEnter {
       cssClass: 'toast-design'
     });
     toast.present();
+  }
+
+  async openModalUsers(establishmentId: string) {
+    const modal = await this.modalController.create({
+      component: UserAlertComponent,
+      componentProps: {
+        establishmentId: establishmentId
+      },
+    });
+    await modal.present();
   }
 
   async openModal(establishmentId: string) {

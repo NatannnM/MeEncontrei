@@ -23,8 +23,8 @@ export class EstablishmentUserService{
         return this.http.get<EstablishmentUser[]>(`${this.API_URL}/user/${user_id}`);
     }
 
-    getByFacilityId(facility_id: string): Observable<EstablishmentUser[]>{
-        return this.http.get<EstablishmentUser[]>(`${this.API_URL}/${facility_id}`);
+    getByFacilityId(id_facility: string): Observable<EstablishmentUser[]>{
+        return this.http.get<EstablishmentUser[]>(`${this.API_URL}/facility/${id_facility}`);
     }   
 
     save(establishmentUser: EstablishmentUser): Observable<EstablishmentUser>{
