@@ -16,32 +16,32 @@
 
   <div class="establishment-list">
     <ion-card *ngFor="let establishment of pesquisaEstablishment;">
-      <div class="card-inner-wrapper"  *ngIf="user.id === establishment.id_user">
+      <div class="card-inner-wrapper" *ngIf="user.id === establishment.id_user">
 
         <div class="image-container">
           <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
         </div>
         <div class="establishment-content">
 
-          <ion-card-title>{{ establishment.name }}</ion-card-title>
+          <ion-card-title class="title">{{ establishment.name }}</ion-card-title>
 
           <ion-button size="small" [routerLink]="['../../editEstablishment', establishment.id_facility]">
-            <ion-icon name="create" slot="start" ></ion-icon>
+            <ion-icon name="create" slot="start"></ion-icon>
             Editar
           </ion-button>
 
-          <ion-button size="small" (click)="remove(establishment.id_facility)" >
-            <ion-icon name="trash" slot="start" ></ion-icon>
+          <ion-button size="small" (click)="remove(establishment.id_facility)">
+            <ion-icon name="trash" slot="start"></ion-icon>
             Apagar
           </ion-button>
 
           <ion-button size="small" (click)="openModalUsers(establishment.id_facility)">
-            <ion-icon name="people" slot="start" ></ion-icon>
+            <ion-icon name="people" slot="start"></ion-icon>
             Usuários
           </ion-button>
 
           <ion-button expand="full" (click)="openModal(establishment.id_facility)">
-            <ion-icon name="alert-circle" slot="start" ></ion-icon>
+            <ion-icon name="alert-circle" slot="start"></ion-icon>
             Avisos
           </ion-button>
 

@@ -7,19 +7,20 @@ import { AlertService } from "./alert-services/alert.service";
 import { ModalController, ToastController } from "@ionic/angular";
 
 @Component({
-    selector: 'app-alert-form',
-    template:`
+  selector: 'app-alert-form',
+  template: `
         <ion-header>
           <ion-toolbar>
             <ion-title>Enviar Aviso</ion-title>
             <ion-buttons slot="end">
-              <ion-button (click)="dismiss()">Fechar</ion-button>
+              <ion-button expand="full" (click)="dismiss()">Fechar</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
 
-        <ion-content>
+        <ion-content [fullscreen]="true">
           <form [formGroup]="alertForm" (ngSubmit)="save()">
+        <ion-list>
             <ion-item>
               <ion-label position="floating">Título</ion-label>
               <ion-input formControlName="title" required></ion-input>
@@ -38,63 +39,63 @@ import { ModalController, ToastController } from "@ionic/angular";
             <ion-item>
               <ion-input formControlName="end_date" labelPlacement="floating" label="Data do fim do alerta: " type="date" />
             </ion-item>
-
+        </ion-list>
             <ion-button expand="full" type="submit" [disabled]="alertForm.invalid">
               Enviar Alerta
             </ion-button>
           </form>
         </ion-content>
     `,
-    styleUrls: ['./alert-form.component.scss'],
-    standalone: false
+  styleUrls: ['./alert-form.component.scss'],
+  standalone: false
 })
 
-export class alertFormComponent{
+export class alertFormComponent {
 
-    user: User | null = null;
-    establishmentId!: '';
+  user: User | null = null;
+  establishmentId!: '';
 
-    alertForm: FormGroup = new FormGroup ({
-        title: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
-        description: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(200)]),
-        begin_date: new FormControl('', [Validators.required]),
-        end_date: new FormControl('', [Validators.required]),
-        id_user: new FormControl(''),
-        id_facility: new FormControl(''),
-    })
+  alertForm: FormGroup = new FormGroup({
+    title: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
+    description: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(200)]),
+    begin_date: new FormControl('', [Validators.required]),
+    end_date: new FormControl('', [Validators.required]),
+    id_user: new FormControl(''),
+    id_facility: new FormControl(''),
+  })
 
-    constructor(
-        private authService: AuthService,
-        private activatedRoute: ActivatedRoute,
-        private alertService: AlertService,
-        private toastController: ToastController,
-        private modalController: ModalController
-    ){
-        this.establishmentId = this.activatedRoute.snapshot.params['id_facility'];
-        this.carregarUsuario();
+  constructor(
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute,
+    private alertService: AlertService,
+    private toastController: ToastController,
+    private modalController: ModalController
+  ) {
+    this.establishmentId = this.activatedRoute.snapshot.params['id_facility'];
+    this.carregarUsuario();
+  }
+
+  dismiss() {
+    this.modalController.dismiss();
+  }
+
+  async carregarUsuario() {
+    try {
+      const dadosUsuario = await this.authService.getUserData();
+      this.user = dadosUsuario.user;
+    } catch (err) {
+      console.error('Erro ao carregar dados do usuário', err);
     }
+  }
 
-    dismiss(){
-        this.modalController.dismiss();
-    }
-
-    async carregarUsuario(){
-        try {
-          const dadosUsuario = await this.authService.getUserData();
-          this.user = dadosUsuario.user;
-        } catch(err) {
-          console.error('Erro ao carregar dados do usuário', err);
-        }
-    }
-
-    save(){
-        let { value } = this.alertForm;
-        value.id_user = this.user?.id;
-        value.id_facility = this.establishmentId;
-        this.alertService.save({
-            ...value
-        }).subscribe({
-      next:() => {
+  save() {
+    let { value } = this.alertForm;
+    value.id_user = this.user?.id;
+    value.id_facility = this.establishmentId;
+    this.alertService.save({
+      ...value
+    }).subscribe({
+      next: () => {
         this.toastController.create({
           message: 'Alerta enviado com sucesso!',
           duration: 3000,
@@ -113,10 +114,10 @@ export class alertFormComponent{
           buttons: [
             { text: 'X', role: 'cancel' }
           ]
-          }).then(toast => toast.present())
-          console.error(error);
-          console.error(error.error.details);
+        }).then(toast => toast.present())
+        console.error(error);
+        console.error(error.error.details);
       }
     });
-    }
+  }
 }

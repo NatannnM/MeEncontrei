@@ -10,17 +10,17 @@ import { userService } from "../user/user-services/user.service";
 import { FormControl, FormGroup } from "@angular/forms";
 
 interface EstablishmentData {
-  id_facility: string;
-  id_user: string;
-  username: string;
-  profile_pic: string;
-  creator: boolean;
+    id_facility: string;
+    id_user: string;
+    username: string;
+    profile_pic: string;
+    creator: boolean;
 }
 
 @Component({
     selector: 'app-user-alert',
     template: `
-        <ion-content class="ion-padding">           
+                  
             <ion-header>
                 <ion-toolbar>
                     <ion-title>Usuários vinculados</ion-title>
@@ -29,7 +29,7 @@ interface EstablishmentData {
                     </ion-buttons>
                 </ion-toolbar>
             </ion-header>
-            <ion-content>
+            <ion-content [fullscreen]="true" class="ion-padding">
                 <ion-list *ngFor="let user of userList">
                     <ion-item>
                         <ion-avatar slot="start">
@@ -51,7 +51,7 @@ interface EstablishmentData {
                     </ion-list>
                 </form>
             </ion-content>
-        </ion-content>
+        
     `,
     styleUrls: ['./user-alert.component.scss'],
     standalone: false
@@ -76,21 +76,21 @@ export class UserAlertComponent implements ViewWillEnter {
         private modalController: ModalController,
         private activatedRoute: ActivatedRoute,
         private userService: userService
-    ){
+    ) {
         this.establishmentId = this.activatedRoute.snapshot.params['establishmentId'];
     }
 
     async ionViewWillEnter(): Promise<void> {
-        try{
+        try {
             console.log(this.establishmentId);
-            if(this.establishmentId){
+            if (this.establishmentId) {
                 const userEstablishment = await firstValueFrom(this.establishmentOnUsersService.getByFacilityId(this.establishmentId));
                 this.userEstablishment = userEstablishment;
                 console.log(userEstablishment);
-            }else{
+            } else {
                 console.log('Estabelecimento não encontrado');
             }
-            if(this.userEstablishment){
+            if (this.userEstablishment) {
                 this.userList = this.userEstablishment.map(user => ({
                     id_facility: user.id_facility,
                     id_user: user.id_user,
@@ -115,14 +115,14 @@ export class UserAlertComponent implements ViewWillEnter {
                     console.error(error)
                 },
             });
-            await this.filtrarUsuarios();    
-        } catch(error){
+            await this.filtrarUsuarios();
+        } catch (error) {
             console.log(error);
             this.userList = [];
         }
     }
 
-    async carregarUsuario(){
+    async carregarUsuario() {
         try {
             const dadosUsuario = await this.authService.getUserData();
             this.currentUser = dadosUsuario.user;
@@ -134,19 +134,19 @@ export class UserAlertComponent implements ViewWillEnter {
         }
     }
 
-    filtrarUsuarios(){
+    filtrarUsuarios() {
         this.userSelectListFilter = this.userSelectList.filter(user => {
-                return this.currentUser && user.id_user !== this.currentUser.id && !this.userList.some(vinculo => vinculo.id_user === user.id_user);
-            }
+            return this.currentUser && user.id_user !== this.currentUser.id && !this.userList.some(vinculo => vinculo.id_user === user.id_user);
+        }
         )
         console.log(this.userSelectListFilter);
     }
 
-    save(){
+    save() {
 
     }
 
-    dismiss(){
+    dismiss() {
         this.modalController.dismiss();
     }
 }
