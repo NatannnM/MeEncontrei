@@ -15,6 +15,7 @@ import { eventsService } from '../event-services/event.service';
 export class EventDetailsComponent  implements OnInit {
   
   event!: Event;
+  origin: string = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -29,6 +30,8 @@ export class EventDetailsComponent  implements OnInit {
 
   ngOnInit() {
     const eventId = this.activatedRoute.snapshot.params['id'];
+    this.origin = this.activatedRoute.snapshot.params['origin'];
+    
     this.eventsService.getById(eventId).subscribe({
       next: (response) => {
         this.event = response.event;

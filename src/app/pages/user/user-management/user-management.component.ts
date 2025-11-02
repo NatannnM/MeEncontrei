@@ -113,7 +113,7 @@ export class UserManagementComponent  implements OnInit, ViewDidEnter {
 
   async remove(establishmentId: string){
     const toast = await this.toastController.create({
-      message: `Tem certeza que deseja apagar esse estabelecimento?`,
+      message: `Tem certeza que deseja apagar esse estabelecimento e todos os usuários e eventos vinculados a ele?`,
       position: 'bottom',
       buttons: [
         {
@@ -123,7 +123,7 @@ export class UserManagementComponent  implements OnInit, ViewDidEnter {
             this.establishmentService.remove(establishmentId).subscribe({
               next: () => {
                 this.exibirToast('Estabelecimento excluído com sucesso!');
-                this.router.navigate(['user/user-management']);
+                this.router.navigate(['user']);
               },
               error: (err) => {
                 this.exibirToast('Ocorreu um erro ao remover o estabelecimento.');

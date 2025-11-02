@@ -57,3 +57,11 @@ ion-toast.toast-design::part(message) {
   font-weight: bold;
 }
 
+ion-toast.toast-design {
+  position: absolute;
+  top: unset;
+  bottom: 30px; /* Mude este valor conforme necessário */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translateX(-50%); /* Ajuste fino para garantir que o Toast fique centralizado */
+}
+

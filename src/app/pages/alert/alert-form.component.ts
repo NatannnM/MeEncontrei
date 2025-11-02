@@ -94,29 +94,29 @@ export class alertFormComponent{
         this.alertService.save({
             ...value
         }).subscribe({
-      next:() => {
-        this.toastController.create({
-          message: 'Alerta enviado com sucesso!',
-          duration: 3000,
-          position: 'bottom',
-          cssClass: 'toast-design'
-        }).then(toast => toast.present());
-        this.dismiss();
-      },
-      error: (error) => {
-        console.log(value);
-        this.toastController.create({
-          message: error.error.message,
-          header: 'Erro ao enviar o alerta!',
-          color: 'danger',
-          position: 'top',
-          buttons: [
-            { text: 'X', role: 'cancel' }
-          ]
-          }).then(toast => toast.present())
-          console.error(error);
-          console.error(error.error.details);
-      }
+            next:() => {
+              this.toastController.create({
+                message: 'Alerta enviado com sucesso!',
+                duration: 3000,
+                position: 'bottom',
+                cssClass: 'toast-design'
+              }).then(toast => toast.present());
+              this.dismiss();
+            },
+            error: (error) => {
+              console.log(value);
+              this.toastController.create({
+                message: error.error.message,
+                header: 'Erro ao enviar o alerta!',
+                color: 'danger',
+                position: 'top',
+                buttons: [
+                  { text: 'X', role: 'cancel' }
+                ]
+                }).then(toast => toast.present())
+                console.error(error);
+                console.error(error.error.details);
+            }
     });
     }
 }

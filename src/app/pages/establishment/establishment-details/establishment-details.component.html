@@ -27,4 +27,9 @@
       </div>
     </div>
   </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="origin === 'admin'">
+    <ion-fab-button [routerLink]="['/establishment/adminManagement', 'estabelecimento']">
+      <ion-icon name="return-down-back"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>   
 </ion-content>

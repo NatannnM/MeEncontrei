@@ -18,6 +18,7 @@ import { switchMap } from 'rxjs';
 export class EstablishmentDetailsComponent  implements OnInit, ViewDidEnter {
   alerts: Alert[] = [];
   establishment!: Establishment;
+  origin: string = '';
 
   constructor(
     private router: Router,
@@ -31,7 +32,8 @@ export class EstablishmentDetailsComponent  implements OnInit, ViewDidEnter {
 
   ionViewDidEnter(): void {
     const establishmentId = this.activatedRoute.snapshot.params['id'];
-    
+    this.origin = this.activatedRoute.snapshot.params['origin'];
+
     this.establishmentService.getById(establishmentId).pipe(
       switchMap((response) => {
         this.establishment = response.facility;

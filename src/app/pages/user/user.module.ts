@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { alertPageModule } from '../alert/alert.module';
+import { AdminManagementComponent } from './admin-management/admin-management.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { alertPageModule } from '../alert/alert.module';
     UserPage,
     AdminComponent,
     UserFormComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    AdminManagementComponent
   ]
 })
 export class UserPageModule { }

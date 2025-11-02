@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { EventPage } from './event.page';
 import { EventFormComponent } from './event-form/event-form.component';
 import { EventDetailsComponent } from './event-details/event-details.component';
+import { AdminManagementComponent } from '../user/admin-management/admin-management.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
     path: 'new',
     component: EventFormComponent
   },
+  {
+    path: 'adminManagement/:opcao',
+    component: AdminManagementComponent
+  }
 ];
 
 @NgModule({

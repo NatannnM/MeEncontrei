@@ -27,6 +27,7 @@ export class EstablishmentFormComponent implements OnInit {
   
   user: User | null = null;
   establishmentId!: string;
+  origin!: string;
 
   constructor(
     private establishmentService: EstablishmentService,
@@ -35,6 +36,8 @@ export class EstablishmentFormComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService
   ) { 
+    const origin = this.activatedRoute.snapshot.params['origin'];
+    this.origin = origin;
     const establishmentId = this.activatedRoute.snapshot.params['id_facility'];
     if(establishmentId){
       this.establishmentService.getById(establishmentId).subscribe({
@@ -97,6 +100,8 @@ export class EstablishmentFormComponent implements OnInit {
     let { value } = this.establishmentForm;
     if(this.user?.role != 'ADMIN'){
       value.public = 'PRIVATE';
+    } else{
+      value.public = 'PUBLIC';
     }
     this.establishmentService.save({
       ...value,
@@ -110,7 +115,11 @@ export class EstablishmentFormComponent implements OnInit {
           cssClass: 'toast-design'
         }).then(toast => toast.present());
         if(this.establishmentId){
-          this.router.navigate(['user']);
+          if(this.origin === 'admin'){
+            this.router.navigate(['admin']);
+          }else{
+            this.router.navigate(['user']);
+          }
         } else {
           this.router.navigate(['/establishment']);
         }
@@ -119,7 +128,7 @@ export class EstablishmentFormComponent implements OnInit {
         console.log(value);
         this.toastController.create({
           message: error.error.message,
-          header: 'Erro ao salvar o estabelecimento ' + value.nome + '!',
+          header: 'Erro ao salvar o estabelecimento ' + value.name + '!',
           color: 'danger',
           position: 'top',
           buttons: [

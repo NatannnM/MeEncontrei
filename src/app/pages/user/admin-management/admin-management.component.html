@@ -1,0 +1,130 @@
+<ion-header class="custom-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Gerenciar {{ opcao === 'estabelecimento' ? 'Estabelecimentos' : opcao === 'evento' ? 'Eventos' : 'Usuários'}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" >
+  <div *ngIf="opcao === 'estabelecimento'">
+    <div class="action-bar">
+      <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisa()"
+        placeholder="Pesquisar estabelecimentos..."></ion-searchbar>
+    </div>
+
+    <div class="establishment-list">
+      <ion-card *ngFor="let establishment of pesquisaEstablishment;">
+        <div class="card-inner-wrapper" >
+
+          <div class="image-container">
+            <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
+          </div>
+          <div class="establishment-content">
+
+            <ion-card-title>{{ establishment.name }}</ion-card-title>
+
+            <ion-button size="small" [routerLink]="['/user/editEstablishment', establishment.id, 'admin']">
+              <ion-icon name="create" slot="start" ></ion-icon>
+              Editar
+            </ion-button>
+
+            <ion-button size="small" (click)="remove(establishment.id)" >
+              <ion-icon name="trash" slot="start" ></ion-icon>
+              Apagar
+            </ion-button>
+
+            <ion-button size="small" (click)="openModalUsers(establishment.id)">
+              <ion-icon name="people" slot="start" ></ion-icon>
+              Usuários
+            </ion-button>
+
+            <ion-button size="small" [routerLink]="['/user/establishmentDetails', establishment.id, 'admin']">
+              <ion-icon name="tablet-landscape" slot="start" ></ion-icon>
+              Exibir
+            </ion-button>
+
+            <ion-button size="small" (click)="aprovar(establishment.public, establishment.id)" *ngIf="establishment.public === 'PRIVATE'">
+              <ion-icon name="checkmark" slot="start" ></ion-icon>
+              Aprovar
+            </ion-button>  
+          
+            <ion-button size="small" (click)="aprovar(establishment.public, establishment.id)" *ngIf="establishment.public === 'PUBLIC'">
+              <ion-icon name="close" slot="start" ></ion-icon>
+              Rejeitar
+            </ion-button>  
+
+
+            <ion-button expand="full" (click)="openModal(establishment.id)">
+              <ion-icon name="alert-circle" slot="start" ></ion-icon>
+              Avisos
+            </ion-button>
+
+          </div>
+
+        </div>
+      </ion-card>
+    </div>
+  </div>  
+  <div *ngIf="opcao === 'evento'">
+    <div class="action-bar">
+      <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisa()"
+        placeholder="Pesquisar eventos..."></ion-searchbar>
+    </div>
+
+    <div class="establishment-list">
+      <ion-card *ngFor="let event of pesquisaEvent;">
+        <div class="card-inner-wrapper">
+
+          <div class="image-container">
+            <img class="establishment-image" [alt]="event.name" [src]="event.image" />
+          </div>
+          <div class="establishment-content">
+
+            <ion-card-title>{{ event.name }}</ion-card-title>
+
+            <ion-button size="small" [routerLink]="['/user/editEvent', event.id, 'admin']">
+              <ion-icon name="create" slot="start" ></ion-icon>
+              Editar
+            </ion-button>
+
+            <ion-button size="small" (click)="remove(event.id)" >
+              <ion-icon name="trash" slot="start" ></ion-icon>
+              Apagar
+            </ion-button>
+
+            <ion-button size="small" (click)="openModalUsers(event.id)">
+              <ion-icon name="people" slot="start" ></ion-icon>
+              Usuários
+            </ion-button>
+
+            <ion-button size="small" [routerLink]="['/user/eventDetails', event.id, 'admin']">
+              <ion-icon name="tablet-landscape" slot="start" ></ion-icon>
+              Exibir
+            </ion-button>
+
+            <ion-button size="small" (click)="aprovar(event.public, event.id)" *ngIf="event.public === 'PRIVATE'">
+              <ion-icon name="checkmark" slot="start" ></ion-icon>
+              Aprovar
+            </ion-button>  
+          
+            <ion-button size="small" (click)="aprovar(event.public, event.id)" *ngIf="event.public === 'PUBLIC'">
+              <ion-icon name="close" slot="start" ></ion-icon>
+              Rejeitar
+            </ion-button>  
+
+
+            <ion-button expand="full" (click)="openModal(event.id)">
+              <ion-icon name="alert-circle" slot="start" ></ion-icon>
+              Avisos
+            </ion-button>
+
+          </div>
+
+        </div>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>
+

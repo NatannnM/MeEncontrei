@@ -85,10 +85,6 @@ export class AdminComponent  implements OnInit, ViewWillEnter {
     });
   }
 
-  async remove(user: User){
-
-  }
-
   ngOnInit() {}
 
 }
