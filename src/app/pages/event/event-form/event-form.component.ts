@@ -26,7 +26,7 @@ export class EventFormComponent implements OnInit {
     name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]), 
     address: new FormControl('', [Validators.required, Validators.minLength(20), Validators.maxLength(255)]), 
     city: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(100)]), 
-    info: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(800)]), 
+    info: new FormControl('', [Validators.required, Validators.minLength(20), Validators.maxLength(800)]), 
     begin_date: new FormControl('', [Validators.required]), 
     end_date: new FormControl('', [Validators.required]),
     id_facility: new FormControl('', [Validators.required]),
