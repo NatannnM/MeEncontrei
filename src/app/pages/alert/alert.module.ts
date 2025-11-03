@@ -25,6 +25,6 @@ import { AlertFormEventComponent } from "./alert-form-event.component";
     UserAlertComponent,
     UserAlertEventComponent
   ],
-  exports: [alertFormComponent, UserAlertComponent]
+  exports: [alertFormComponent, AlertFormEventComponent, UserAlertComponent, UserAlertEventComponent ]
 })
 export class alertPageModule { }

@@ -20,7 +20,7 @@ interface EventData{
 @Component({
     selector: 'app-user-alert-event',
     template:`
-        <ion-content class="ion-padding">           
+                  
             <ion-header>
                 <ion-toolbar>
                     <ion-title>Usuários vinculados</ion-title>
@@ -29,7 +29,7 @@ interface EventData{
                     </ion-buttons>
                 </ion-toolbar>
             </ion-header>
-            <ion-content>
+            <ion-content [fullscreen]="true" class="ion-padding">
                 <ion-list *ngFor="let user of userList">
                     <ion-item>
                         <ion-avatar slot="start">
@@ -59,7 +59,7 @@ interface EventData{
                     </ion-list>
                 </form>
             </ion-content>
-        </ion-content>
+      
     `,
     styleUrls: ['./user-alert-event.component.scss'],
     standalone: false
