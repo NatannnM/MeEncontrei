@@ -10,17 +10,17 @@ import { userService } from "../user/user-services/user.service";
 import { FormControl, FormGroup } from "@angular/forms";
 
 interface EstablishmentData {
-  id_facility: string;
-  id_user: string;
-  username: string;
-  profile_pic: string;
-  creator: boolean;
+    id_facility: string;
+    id_user: string;
+    username: string;
+    profile_pic: string;
+    creator: boolean;
 }
 
 @Component({
     selector: 'app-user-alert',
     template: `
-        <ion-content class="ion-padding">           
+                  
             <ion-header>
                 <ion-toolbar>
                     <ion-title>Usuários vinculados</ion-title>
@@ -29,7 +29,7 @@ interface EstablishmentData {
                     </ion-buttons>
                 </ion-toolbar>
             </ion-header>
-            <ion-content>
+            <ion-content [fullscreen]="true" class="ion-padding">
                 <ion-list *ngFor="let user of userList">
                     <ion-item>
                         <ion-avatar slot="start">
@@ -59,7 +59,7 @@ interface EstablishmentData {
                     </ion-list>
                 </form>
             </ion-content>
-        </ion-content>
+        
     `,
     styleUrls: ['./user-alert.component.scss'],
     standalone: false
@@ -84,7 +84,7 @@ export class UserAlertComponent implements ViewWillEnter {
         private modalController: ModalController,
         private activatedRoute: ActivatedRoute,
         private userService: userService
-    ){
+    ) {
         this.establishmentId = this.activatedRoute.snapshot.params['establishmentId'];
     }
 
@@ -115,7 +115,7 @@ export class UserAlertComponent implements ViewWillEnter {
         }
     }
 
-    async carregarUsuario(){
+    async carregarUsuario() {
         try {
             const dadosUsuario = await this.authService.getUserData();
             this.currentUser = dadosUsuario.user;
@@ -189,8 +189,7 @@ export class UserAlertComponent implements ViewWillEnter {
         await toast.present();
     }
 
-    
-    dismiss(){
+    dismiss() {
         this.modalController.dismiss();
     }
 
