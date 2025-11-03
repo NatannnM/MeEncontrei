@@ -126,5 +126,41 @@
       </ion-card>
     </div>
   </div>
+  <div *ngIf="opcao === 'usuarios'">
+    <div class="action-bar">
+      <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisa()"
+        placeholder="Pesquisar usuarios..."></ion-searchbar>
+      <ion-button class="create-button" [routerLink]="['/user/newUser', 'admin']">
+      <ion-icon slot="start" name="add"></ion-icon>
+      Criar Novo Usuário
+    </ion-button>  
+    </div>
+    
+    <div class="establishment-list">
+      <ion-card *ngFor="let user of pesquisaUser;">
+        <div class="card-inner-wrapper">
+          <div class="image-container">
+            <img class="establishment-image" [alt]="user.username" [src]="user.profile_pic" />
+          </div>
+
+          <div class="establishment-content">
+
+            <ion-card-title>{{ user.username }}</ion-card-title>
+
+            <ion-button size="small" [routerLink]="['/user/editUser', user.id, 'admin']">
+              <ion-icon name="create" slot="start" ></ion-icon>
+              Editar
+            </ion-button>
+
+            <ion-button size="small" (click)="remove(user.id)" >
+              <ion-icon name="trash" slot="start" ></ion-icon>
+              Apagar
+            </ion-button>
+          </div>  
+        </div>
+      </ion-card>
+    </div>
+    
+  </div>
 </ion-content>
 

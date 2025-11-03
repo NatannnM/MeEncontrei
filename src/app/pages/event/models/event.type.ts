@@ -7,6 +7,7 @@ export type Event = {
   begin_date: Date | string,
   end_date: Date | string,
   info: string,
+  photo: string,
   image: string,
   price: number,
   id_facility: string,

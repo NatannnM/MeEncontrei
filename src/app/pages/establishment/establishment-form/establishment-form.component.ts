@@ -18,7 +18,7 @@ export class EstablishmentFormComponent implements OnInit {
     location: new FormControl('', [Validators.required, Validators.minLength(20), Validators.maxLength(255)]),
     city: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(100)]),
     name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
-    description: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(800)]),
+    description: new FormControl('', [Validators.required, Validators.minLength(20), Validators.maxLength(800)]),
     owner: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
     photo: new FormControl('', Validators.required),
     map: new FormControl('', Validators.required),

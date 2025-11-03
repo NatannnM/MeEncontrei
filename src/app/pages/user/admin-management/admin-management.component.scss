@@ -44,6 +44,22 @@ ion-content {
   padding: 0;
 }
 
+.create-button {
+  // flex: 1;
+  min-width: 250px;
+  --background: linear-gradient(to right, rgb(88, 71, 203)d, #7eadf8);
+  --color: #fff;
+  --icon-color: #ffffff;
+  --border-radius: 8px;
+  padding: 0;
+  --background-hover: #5a1e9e;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  height: 44px;
+  font-weight: 600;
+}
+
 .establishment-list {
   padding: 16px 24px;
 

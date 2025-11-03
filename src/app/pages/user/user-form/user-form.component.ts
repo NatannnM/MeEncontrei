@@ -24,6 +24,7 @@ export class UserFormComponent  implements OnInit {
 
   userId!: string;
   user: User | null = null;
+  origin!: string;
 
   constructor(
     private userService: userService,
@@ -39,7 +40,7 @@ export class UserFormComponent  implements OnInit {
         this.user = undefined as any;
       }
     })
-
+    this.origin = this.activatedRoute.snapshot.params['origin'];
     const userId = this.activatedRoute.snapshot.params['id'];
     if(userId){
       this.userService.getById(userId).subscribe({
@@ -107,7 +108,12 @@ export class UserFormComponent  implements OnInit {
           position: 'bottom',
           cssClass: 'toast-design'
         }).then(toast => toast.present());
-        this.router.navigate(['/user'])
+        if(this.origin === 'admin'){
+            this.router.navigate(['admin']);
+          }else{
+            this.router.navigate(['/user'])
+          }
+        
       },
       error: (error) => {
         this.toastController.create({

@@ -16,9 +16,11 @@ export class AlertService {
     ){}
     
     getByFacilityId(facility_id: string): Observable<Alert[]>{
-        console.log(facility_id);
-        console.log(`${this.API_URL}/facility/${facility_id}`);
         return this.http.get<Alert[]>(`${this.API_URL}/facility/${facility_id}`);
+    }
+
+    getByEventId(event_id: string): Observable<Alert[]>{
+        return this.http.get<Alert[]>(`${this.API_URL}/event/${event_id}`);
     }
     
     save(alert: Alert){
