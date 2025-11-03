@@ -88,7 +88,6 @@ export class UserManagementComponent  implements OnInit, ViewDidEnter {
           } else {
             const eventUser = await firstValueFrom(this.EventOnUsersService.getByUserId(this.user.id));
             this.eventUser = eventUser;
-            console.log(this.eventUser);
           }
         }else{
           console.log('Usuário não encontrado');

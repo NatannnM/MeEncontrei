@@ -1,4 +1,4 @@
-<ion-content  *ngIf="establishment" [fullscreen]="true">
+<ion-content *ngIf="establishment" [fullscreen]="true">
   <div class="background-banner">
     <img [alt]="establishment.name" [src]="establishment.image">
     <div class="background-fade"></div>
@@ -17,9 +17,26 @@
       <div class="actions-column">
         <ion-card class="actions-card">
           <ion-card-content>
-            <p>Explore a localização no mapa.</p>
-            <ion-button expand="block" shape="round" (click)="abrir_mapa()">
-              Acesse o Mapa!
+            <div *ngFor="let estUser of establishmentUser;">
+              <ion-button expand="block" shape="round" (click)="onFileSelected($event)" *ngIf="estUser.creator === true && estUser.id_user === currentUser.id">
+                Inserir mapa
+                <input type="file" accept=".txt" (change)="onFileSelected($event)"
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;" />
+                <ion-icon slot="end" name="add-circle-outline"></ion-icon>
+              </ion-button>
+              
+              <ion-button expand="block" shape="round" (click)="editar_mapa()" *ngIf="estUser.creator === true && estUser.id_user === currentUser.id">
+                Editar mapa
+                <ion-icon slot="end" name="create-outline"></ion-icon>
+              </ion-button>
+
+              <ion-button expand="block" shape="round" (click)="editar_mapa()" *ngIf="estUser.creator === true && estUser.id_user === currentUser.id">
+                Baixar mapa
+                <ion-icon slot="end" name="download-outline"></ion-icon>
+              </ion-button>
+            </div>
+            <ion-button expand="block" shape="round" (click)="acessar_mapa()">
+              Acesse o Mapa
               <ion-icon slot="end" name="map-outline"></ion-icon>
             </ion-button>
           </ion-card-content>
@@ -31,5 +48,5 @@
     <ion-fab-button [routerLink]="['/establishment/adminManagement', 'estabelecimento']">
       <ion-icon name="return-down-back"></ion-icon>
     </ion-fab-button>
-  </ion-fab>   
+  </ion-fab>
 </ion-content>

@@ -40,6 +40,11 @@
               Usuários
             </ion-button>
 
+            <ion-button size="small" [routerLink]="['/user/establishmentDetails', establishment.id_facility, 'user']">
+              <ion-icon name="tablet-landscape" slot="start" ></ion-icon>
+              Exibir
+            </ion-button>
+
             <ion-button expand="full" (click)="openModal(establishment.id_facility)">
               <ion-icon name="alert-circle" slot="start" ></ion-icon>
               Avisos

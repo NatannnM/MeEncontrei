@@ -13,8 +13,8 @@ import { User } from '../../user/models/user.type';
   standalone: false,
 })
 export class EstablishmentFormComponent implements OnInit {
-  
-  establishmentForm: FormGroup = new FormGroup ({
+
+  establishmentForm: FormGroup = new FormGroup({
     location: new FormControl('', [Validators.required, Validators.minLength(20), Validators.maxLength(255)]),
     city: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(100)]),
     name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
@@ -24,7 +24,7 @@ export class EstablishmentFormComponent implements OnInit {
     map: new FormControl('', Validators.required),
     public: new FormControl(''),
   });
-  
+
   user: User | null = null;
   establishmentId!: string;
   origin!: string;
@@ -35,21 +35,23 @@ export class EstablishmentFormComponent implements OnInit {
     private toastController: ToastController,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService
-  ) { 
+  ) {
     const origin = this.activatedRoute.snapshot.params['origin'];
     this.origin = origin;
+
     const establishmentId = this.activatedRoute.snapshot.params['id_facility'];
-    if(establishmentId){
+
+    if (establishmentId) {
       this.establishmentService.getById(establishmentId).subscribe({
         next: (response) => {
-          if(response && response.facility){
+          if (response && response.facility) {
             this.establishmentId = establishmentId;
             this.establishmentForm.setValue({
               location: response.facility.location,
               city: response.facility.city,
               name: response.facility.name,
               description: response.facility.description,
-              owner:response.facility.owner,
+              owner: response.facility.owner,
               photo: '',
               map: '',
               public: ''
@@ -65,7 +67,9 @@ export class EstablishmentFormComponent implements OnInit {
           }).then(toast => toast.present())
         }
       })
+
       this.carregarUsuario();
+
     }
   }
 
@@ -73,6 +77,7 @@ export class EstablishmentFormComponent implements OnInit {
 
   arquivoSelecionado(event: Event, controlName: 'photo' | 'map'): void {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       const reader = new FileReader();
@@ -87,37 +92,40 @@ export class EstablishmentFormComponent implements OnInit {
     }
   }
 
-  async carregarUsuario(){
+  async carregarUsuario() {
     try {
       const dadosUsuario = await this.authService.getUserData();
       this.user = dadosUsuario.user;
-    } catch(err) {
+    } catch (err) {
       console.error('Erro ao carregar dados do usuário', err);
     }
   }
 
-  save(){
+  save() {
     let { value } = this.establishmentForm;
-    if(this.user?.role != 'ADMIN'){
+
+    if (this.user?.role != 'ADMIN') {
       value.public = 'PRIVATE';
-    } else{
+    } else {
       value.public = 'PUBLIC';
     }
+
     this.establishmentService.save({
       ...value,
       id: this.establishmentId
     }).subscribe({
-      next:() => {
+      next: () => {
         this.toastController.create({
           message: 'Estabelecimento salvo com sucesso!',
           duration: 3000,
           position: 'bottom',
           cssClass: 'toast-design'
         }).then(toast => toast.present());
-        if(this.establishmentId){
-          if(this.origin === 'admin'){
+
+        if (this.establishmentId) {
+          if (this.origin === 'admin') {
             this.router.navigate(['admin']);
-          }else{
+          } else {
             this.router.navigate(['user']);
           }
         } else {
@@ -134,9 +142,9 @@ export class EstablishmentFormComponent implements OnInit {
           buttons: [
             { text: 'X', role: 'cancel' }
           ]
-          }).then(toast => toast.present())
-          console.error(error);
-          console.error(error.error.details);
+        }).then(toast => toast.present())
+        console.error(error);
+        console.error(error.error.details);
       }
     });
   }
