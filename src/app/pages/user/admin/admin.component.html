@@ -8,80 +8,56 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="currentUser">
-  <ion-card>
-    <ion-card-content>
-      <div class="profile-container">
-        @if(currentUser.profile_pic){
-          <img [alt]="currentUser.username" [src]="currentUser.profile_pic" class="profile-photo"/>
-        } @else {
-          <img alt="Sem Capa" src="https://placehold.co/400"class="profile-photo"/>
-        }
+  <div class="profile-content-wrapper">
+    <ion-card class="profile-card">
+      <ion-card-content>
 
-        <div class="profile-details">
-          <h2>{{ currentUser.username }}</h2>
-          <p><strong>Email:</strong> {{ currentUser.email }}</p>
-          
-          <p><strong>Administrador:</strong> {{ currentUser.role == 'ADMIN' ? 'Sim' : 'Não' }}</p>
+        <div class="profile-section">
+          <div class="profile-photo-wrapper">
+            @if(currentUser.profile_pic){
+            <img [alt]="currentUser.username" [src]="currentUser.profile_pic" class="profile-photo" />
+            } @else {
+
+            <ion-icon name="person-circle-outline" class="profile-photo-fallback"></ion-icon>
+            }
+          </div>
+
+          <div class="profile-details">
+            <h1 class="ion-no-margin">{{ currentUser.username }}</h1>
+            <p class="detail-item">
+              <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+              {{ currentUser.email }}
+            </p>
+          </div>
         </div>
-      </div>
 
-    </ion-card-content>
-  </ion-card>
+      </ion-card-content>
+    </ion-card>
 
-  <ion-list>
-    <ion-list-header>
-      <ion-label>Todos os perfis cadastrados:</ion-label>
-    </ion-list-header>
-    @for(users of listUser; track users.username){
-      <ion-item>
-        <ion-label>
-          <h2>{{ users.username }}</h2>
-          <p>{{ users.email }}</p>
-        </ion-label>
-      </ion-item>
-      @if(users.id !== currentUser.id){
-        <ion-button size="small" [routerLink]="['edit', users.id]">
-          <ion-icon name="create" slot="start" ></ion-icon>
-          Editar
-        </ion-button>
-        
-        <ion-button size="small" (click)="remove(users)">
-          <ion-icon name="trash" slot="end"></ion-icon>
-          Excluir
-        </ion-button>
-      }
-    }
-  </ion-list>
 
-  <ion-list>
-    <ion-list-header>
-      <ion-label>Todos os estabelecimentos cadastrados:</ion-label>
-    </ion-list-header>
-    @for(est of listEstablishment; track est.name){
-      <ion-item>
-        <ion-label>
-          <h2>{{ est.name }}</h2>
-        </ion-label>
-      </ion-item>
-      }
-  </ion-list>
+    <ion-card class="management-card">
+      <ion-card-header>
+        <ion-card-title>Gerenciar Conteúdo</ion-card-title>
+        <ion-card-subtitle>Usuários, Estabelecimentos e Eventos</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="management-actions">
+          <ion-button expand="block" fill="solid" [routerLink]="['/user/managementAdmin', 'usuarios']">
+            <ion-icon name="people-circle" slot="start"></ion-icon>
+            Usuários
+          </ion-button>
 
-  <ion-list>
-    <ion-list-header>
-      <ion-label>Todos os eventos cadastrados:</ion-label>
-    </ion-list-header>
-    @for(events of listEvent; track events.name){
-      <ion-item>
-        <ion-label>
-          <h2>{{ events.name }}</h2>
-        </ion-label>
-      </ion-item>
-      }
-  </ion-list>
+          <ion-button expand="block" fill="solid" [routerLink]="['/user/managementAdmin', 'estabelecimento']">
+            <ion-icon name="business" slot="start"></ion-icon>
+            Estabelecimentos
+          </ion-button>
 
-   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button [routerLink]="['new']">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+          <ion-button expand="block" fill="solid" [routerLink]="['/user/managementAdmin', 'evento']">
+            <ion-icon name="calendar" slot="start"></ion-icon>
+            Eventos
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

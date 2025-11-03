@@ -8,46 +8,93 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <div *ngIf="opcao === 'estabelecimento'">
+    <div class="action-bar">
+      <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisa()"
+        placeholder="Pesquisar estabelecimentos..."></ion-searchbar>
+    </div>
 
-  <div class="action-bar">
-    <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisaEstabelecimentos()"
-      placeholder="Pesquisar estabelecimentos..."></ion-searchbar>
-  </div>
+    <div class="establishment-list">
+      <ion-card *ngFor="let establishment of pesquisaEstablishment;">
+        <div class="card-inner-wrapper"  *ngIf="user.id === establishment.id_user">
 
-  <div class="establishment-list">
-    <ion-card *ngFor="let establishment of pesquisaEstablishment;">
-      <div class="card-inner-wrapper" *ngIf="user.id === establishment.id_user">
+          <div class="image-container">
+            <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
+          </div>
+          <div class="establishment-content">
 
-        <div class="image-container">
-          <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
+            <ion-card-title>{{ establishment.name }}</ion-card-title>
+
+            <ion-button size="small" [routerLink]="['../../editEstablishment', establishment.id_facility, 'user']">
+              <ion-icon name="create" slot="start" ></ion-icon>
+              Editar
+            </ion-button>
+
+            <ion-button size="small" (click)="remove(establishment.id_facility)" >
+              <ion-icon name="trash" slot="start" ></ion-icon>
+              Apagar
+            </ion-button>
+
+            <ion-button size="small" (click)="openModalUsers(establishment.id_facility)">
+              <ion-icon name="people" slot="start" ></ion-icon>
+              Usuários
+            </ion-button>
+
+            <ion-button size="small" [routerLink]="['/user/establishmentDetails', establishment.id_facility, 'user']">
+              <ion-icon name="tablet-landscape" slot="start" ></ion-icon>
+              Exibir
+            </ion-button>
+
+            <ion-button expand="full" (click)="openModal(establishment.id_facility)">
+              <ion-icon name="alert-circle" slot="start" ></ion-icon>
+              Avisos
+            </ion-button>
+
+          </div>
+
         </div>
-        <div class="establishment-content">
-
-          <ion-card-title class="title">{{ establishment.name }}</ion-card-title>
-
-          <ion-button size="small" [routerLink]="['../../editEstablishment', establishment.id_facility]">
-            <ion-icon name="create" slot="start"></ion-icon>
-            Editar
-          </ion-button>
-
-          <ion-button size="small" (click)="remove(establishment.id_facility)">
-            <ion-icon name="trash" slot="start"></ion-icon>
-            Apagar
-          </ion-button>
-
-          <ion-button size="small" (click)="openModalUsers(establishment.id_facility)">
-            <ion-icon name="people" slot="start"></ion-icon>
-            Usuários
-          </ion-button>
-
-          <ion-button expand="full" (click)="openModal(establishment.id_facility)">
-            <ion-icon name="alert-circle" slot="start"></ion-icon>
-            Avisos
-          </ion-button>
-
-        </div>
-
-      </div>
-    </ion-card>
+      </ion-card>
+    </div>
   </div>
+  <div *ngIf="opcao === 'evento'">
+    <div class="action-bar">
+      <ion-searchbar class="search-input" [(ngModel)]="termoPesquisado" (ionInput)="pesquisa()"
+        placeholder="Pesquisar eventos..."></ion-searchbar>
+    </div>
+
+    <div class="establishment-list">
+      <ion-card *ngFor="let event of pesquisaEvent;">
+        <div class="card-inner-wrapper"  *ngIf="user.id === event.id_user">
+
+          <div class="image-container">
+            <img class="establishment-image" [alt]="event.name" [src]="event.image" />
+          </div>
+          <div class="establishment-content">
+
+            <ion-card-title>{{ event.name }}</ion-card-title>
+
+            <ion-button size="small" [routerLink]="['/user/editEvent', event.id_event, 'user']">
+              <ion-icon name="create" slot="start" ></ion-icon>
+              Editar
+            </ion-button>
+
+            <ion-button size="small" (click)="remove(event.id_event)" >
+              <ion-icon name="trash" slot="start" ></ion-icon>
+              Apagar
+            </ion-button>
+
+            <ion-button size="small" (click)="openModalUsers(event.id_event)">
+              <ion-icon name="people" slot="start" ></ion-icon>
+              Usuários
+            </ion-button>
+
+            <ion-button expand="full" (click)="openModal(event.id_event)">
+              <ion-icon name="alert-circle" slot="start" ></ion-icon>
+              Avisos
+            </ion-button>
+          </div>
+        </div>
+      </ion-card>
+    </div>
+  </div>  
 </ion-content>

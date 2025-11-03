@@ -1,16 +1,16 @@
-import { Component } from "@angular/core";
-import { EstablishmentUserService } from "../establishment/establishment-services/establishmentUser.service";
-import { User } from "../user/models/user.type";
 import { ModalController, ToastController, ViewWillEnter } from "@ionic/angular";
+import { User } from "../user/models/user.type";
+import { EventUser } from "../event/models/eventUser.type";
+import { FormControl, FormGroup } from "@angular/forms";
+import { Component } from "@angular/core";
+import { EventUserService } from "../event/event-services/eventUser.service";
 import { AuthService } from "src/app/services/auth.service";
-import { firstValueFrom } from "rxjs";
-import { EstablishmentUser } from "../establishment/models/establishmentUser.type";
 import { ActivatedRoute } from "@angular/router";
 import { userService } from "../user/user-services/user.service";
-import { FormControl, FormGroup } from "@angular/forms";
+import { firstValueFrom } from "rxjs";
 
-interface EstablishmentData {
-    id_facility: string;
+interface EventData{
+    id_event: string;
     id_user: string;
     username: string;
     profile_pic: string;
@@ -18,9 +18,9 @@ interface EstablishmentData {
 }
 
 @Component({
-    selector: 'app-user-alert',
-    template: `
-                  
+    selector: 'app-user-alert-event',
+    template:`
+        <ion-content class="ion-padding">           
             <ion-header>
                 <ion-toolbar>
                     <ion-title>Usuários vinculados</ion-title>
@@ -29,7 +29,7 @@ interface EstablishmentData {
                     </ion-buttons>
                 </ion-toolbar>
             </ion-header>
-            <ion-content [fullscreen]="true" class="ion-padding">
+            <ion-content>
                 <ion-list *ngFor="let user of userList">
                     <ion-item>
                         <ion-avatar slot="start">
@@ -38,7 +38,7 @@ interface EstablishmentData {
                         <ion-label>
                             <h2>{{ user.username }}</h2>   
                         </ion-label>
-                        <ion-button *ngIf="user.creator !== true" size="small" (click)="remove(user.id_user, user.id_facility)" >
+                        <ion-button *ngIf="user.creator !== true" size="small" (click)="remove(user.id_user, user.id_event)" >
                             <ion-icon name="trash" slot="start" ></ion-icon>
                         </ion-button>
                     </ion-item>
@@ -59,47 +59,47 @@ interface EstablishmentData {
                     </ion-list>
                 </form>
             </ion-content>
-        
+        </ion-content>
     `,
-    styleUrls: ['./user-alert.component.scss'],
+    styleUrls: ['./user-alert-event.component.scss'],
     standalone: false
 })
 
-export class UserAlertComponent implements ViewWillEnter {
+export class UserAlertEventComponent implements ViewWillEnter{
     currentUser: User | undefined;
-    establishmentId!: '';
-    userList: EstablishmentData[] = [];
-    userEstablishment: EstablishmentUser[] | undefined = [];
-    userSelectList: EstablishmentData[] = [];
-    userSelectListFilter: EstablishmentData[] = [];
+    eventId!: '';
+    userList: EventData[] = [];
+    userEvent: EventUser[] | undefined = [];
+    userSelectList: EventData[] = [];
+    userSelectListFilter: EventData[] = [];
 
     userForm: FormGroup = new FormGroup({
         id_user: new FormControl(''),
     })
 
     constructor(
-        private establishmentOnUsersService: EstablishmentUserService,
+        private eventUserService: EventUserService,
         private authService: AuthService,
         private toastController: ToastController,
         private modalController: ModalController,
         private activatedRoute: ActivatedRoute,
         private userService: userService
-    ) {
-        this.establishmentId = this.activatedRoute.snapshot.params['establishmentId'];
+    ){
+        this.eventId = this.activatedRoute.snapshot.params['eventId'];
     }
 
     async ionViewWillEnter(): Promise<void> {
         try{
-            if(this.establishmentId){
-                const userEstablishment = await firstValueFrom(this.establishmentOnUsersService.getByFacilityId(this.establishmentId));
-                this.userEstablishment = userEstablishment;
+            if(this.eventId){
+                const userEvent = await firstValueFrom(this.eventUserService.getByEventId(this.eventId));
+                this.userEvent = userEvent;
             }else{
-                console.log('Estabelecimento não encontrado');
+                console.log('Evento não encontrado');
             }
 
-            if(this.userEstablishment){
-                this.userList = this.userEstablishment.map(user => ({
-                    id_facility: user.id_facility,
+            if(this.userEvent){
+                this.userList = this.userEvent.map(user => ({
+                    id_event: user.id_event,
                     id_user: user.id_user,
                     username: user.user.username,
                     profile_pic: user.user.profile_pic,
@@ -108,14 +108,14 @@ export class UserAlertComponent implements ViewWillEnter {
             }
             await this.carregarUsuario();
             await this.carregarUserSelectList();
-            await this.filtrarUsuarios();    
+            await this.filtrarUsuarios();
         } catch(error){
             console.log(error);
             this.userList = [];
         }
     }
-
-    async carregarUsuario() {
+    
+    async carregarUsuario(){
         try {
             const dadosUsuario = await this.authService.getUserData();
             this.currentUser = dadosUsuario.user;
@@ -132,7 +132,7 @@ export class UserAlertComponent implements ViewWillEnter {
             this.userService.getList().subscribe({
                 next: (data) => {
                     this.userSelectList = data.user.map(user => ({
-                        id_facility: '',
+                        id_event: '',
                         id_user: user.id,
                         username: user.username,
                         profile_pic: user.profile_pic,
@@ -158,7 +158,7 @@ export class UserAlertComponent implements ViewWillEnter {
         console.log("Lista filtrada: "+ this.userSelectListFilter);
     }
 
-    async remove(userId: string, establishmentId: string){
+    async remove(userId: string, eventId: string){
         const toast = await this.toastController.create({
             message: `Tem certeza que deseja desvincular esse usuário?`,
             position: 'bottom',
@@ -167,7 +167,7 @@ export class UserAlertComponent implements ViewWillEnter {
                     side: 'end',
                     text: 'confirmar',
                     handler: () => {
-                        this.establishmentOnUsersService.delete(userId, establishmentId).subscribe({
+                        this.eventUserService.delete(userId, eventId).subscribe({
                             next: () => {
                                 this.exibirToast('Usuário desvinculado com sucesso!');
                                 this.dismiss();
@@ -189,7 +189,7 @@ export class UserAlertComponent implements ViewWillEnter {
         await toast.present();
     }
 
-    dismiss() {
+    dismiss(){
         this.modalController.dismiss();
     }
 
@@ -205,9 +205,9 @@ export class UserAlertComponent implements ViewWillEnter {
 
     save(){
         let { value } = this.userForm;
-        value.id_facility = this.establishmentId;
+        value.id_event = this.eventId;
         value.creator = false;
-        this.establishmentOnUsersService.save({
+        this.eventUserService.save({
             ...value
         }).subscribe({
             next:() => {
@@ -235,5 +235,4 @@ export class UserAlertComponent implements ViewWillEnter {
             }
         });
     }
-
 }

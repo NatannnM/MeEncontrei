@@ -6,7 +6,11 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EstablishmentService } from '../establishment-services/establishment.service';
 import { AlertService } from '../../alert/alert-services/alert.service';
 import { Alert } from '../../alert/models/alert.type';
-import { switchMap } from 'rxjs';
+import { firstValueFrom, switchMap } from 'rxjs';
+import { User } from '../../user/models/user.type';
+import { EstablishmentUserService } from '../establishment-services/establishmentUser.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { EstablishmentUser } from '../models/establishmentUser.type';
 
 @Component({
   selector: 'app-establishment-details',
@@ -15,9 +19,14 @@ import { switchMap } from 'rxjs';
   standalone: true,
   imports: [CommonModule, IonicModule, RouterModule]
 })
-export class EstablishmentDetailsComponent  implements OnInit, ViewDidEnter {
+export class EstablishmentDetailsComponent implements OnInit, ViewDidEnter {
+  currentUser!: User;
   alerts: Alert[] = [];
   establishment!: Establishment;
+  establishmentUser: EstablishmentUser[] | undefined = [];
+  origin: string = '';
+  selectedFile: File | null = null;
+  mapData: string = '';
 
   constructor(
     private router: Router,
@@ -25,13 +34,19 @@ export class EstablishmentDetailsComponent  implements OnInit, ViewDidEnter {
     private toastController: ToastController,
     private establishmentService: EstablishmentService,
     private alertService: AlertService,
-  ) { 
+    private establishmentUserService: EstablishmentUserService,
+    private authService: AuthService
+  ) {
+    this.carregarUsuario();
     
   }
 
-  ionViewDidEnter(): void {
+  async ionViewDidEnter(): Promise<void> {
     const establishmentId = this.activatedRoute.snapshot.params['id'];
-    
+    this.origin = this.activatedRoute.snapshot.params['origin'];
+
+    const establishmentUser = await firstValueFrom(this.establishmentUserService.getByFacilityId(establishmentId));
+    this.establishmentUser = establishmentUser;
     this.establishmentService.getById(establishmentId).pipe(
       switchMap((response) => {
         this.establishment = response.facility;
@@ -46,13 +61,13 @@ export class EstablishmentDetailsComponent  implements OnInit, ViewDidEnter {
         this.alerts.forEach(alert => {
           const endDate = new Date(alert.end_date);
 
-          if(endDate >= currentDate){
+          if (endDate >= currentDate) {
             this.toastController.create({
               message: `${alert.title} — ${alert.description}`,
               position: 'bottom',
               cssClass: 'toast-design',
               buttons: [
-                { text: 'X', role: 'cancel'}
+                { text: 'X', role: 'cancel' }
               ]
             }).then(toast => toast.present());
           }
@@ -64,10 +79,41 @@ export class EstablishmentDetailsComponent  implements OnInit, ViewDidEnter {
     });
   }
 
-  abrir_mapa(){
+  async carregarUsuario(){
+    try {
+      const dadosUsuario = await this.authService.getUserData();
+      this.currentUser = dadosUsuario.user;
+    } catch(err) {
+      console.error('Erro ao carregar dados do usuário', err);
+    }
+  }
+
+  abrir_mapa() {
     this.router.navigate(['../establishment-maps']);
   }
 
-  ngOnInit() {}
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.mapData = reader.result as string;
+        this.router.navigate(['../establishment-maps']);
+      };
+      reader.readAsText(file);
+    }
+  }
+
+  editar_mapa() {
+    this.router.navigate(['../establishment-maps']);
+  }
+
+  acessar_mapa() {
+    this.router.navigate(['../establishment-maps']);
+  }
+
+  ngOnInit() { }
 
 }

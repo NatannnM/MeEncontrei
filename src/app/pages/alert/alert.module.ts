@@ -6,6 +6,8 @@ import { IonicModule } from "@ionic/angular";
 import { MaskitoDirective } from "@maskito/angular";
 import { alertFormComponent } from "./alert-form.component";
 import { UserAlertComponent } from "./user-alert.component";
+import { UserAlertEventComponent } from "./user-alert-event.component";
+import { AlertFormEventComponent } from "./alert-form-event.component";
 
 @NgModule({
   imports: [
@@ -19,7 +21,9 @@ import { UserAlertComponent } from "./user-alert.component";
   ],
   declarations: [
     alertFormComponent,
-    UserAlertComponent
+    AlertFormEventComponent,
+    UserAlertComponent,
+    UserAlertEventComponent
   ],
   exports: [alertFormComponent, UserAlertComponent]
 })
