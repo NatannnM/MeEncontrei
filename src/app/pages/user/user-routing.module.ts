@@ -25,6 +25,10 @@ const routes: Routes = [
     component: UserFormComponent
   },
   {
+    path: 'newUser/:origin',
+    component: UserFormComponent
+  },
+  {
     path: 'management/:opcao',
     component: UserManagementComponent
   },
@@ -35,6 +39,10 @@ const routes: Routes = [
   {
     path: 'editEvent/:id_event/:origin',
     component: EventFormComponent
+  },
+  {
+    path: 'editUser/:id/:origin',
+    component: UserFormComponent
   },
   {
     path: 'admin',

@@ -131,7 +131,7 @@ export class UserAlertEventComponent implements ViewWillEnter{
         return new Promise<void>((resolve, reject) => {
             this.userService.getList().subscribe({
                 next: (data) => {
-                    this.userSelectList = data.map(user => ({
+                    this.userSelectList = data.user.map(user => ({
                         id_event: '',
                         id_user: user.id,
                         username: user.username,

@@ -48,7 +48,7 @@ export class UserPage implements OnInit, ViewWillEnter {
           side: 'end',
           text: 'confirmar',
           handler: () => {
-            this.userService.remove(user).subscribe({
+            this.userService.remove(user.id).subscribe({
               next: () => {
                 this.exibirToast('Conta excluída com sucesso!');
                 this.router.navigate(['../auth']);

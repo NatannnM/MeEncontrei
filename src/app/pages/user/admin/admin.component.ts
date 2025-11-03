@@ -76,7 +76,7 @@ export class AdminComponent  implements OnInit, ViewWillEnter {
   async carregarUsuarios(){
     this.userService.getList().subscribe({
       next: (response) => {
-        this.listUser = response;
+        this.listUser = response.user;
       },
       error: (error) => {
         alert('Erro ao carregar lista de Usuários');

@@ -38,7 +38,7 @@ export class userService{
         )        
     }
 
-    getList(): Observable<User[]> {
+    getList(): Observable<usersResponse> {
         return from(this.authService.getToken()).pipe(
             switchMap(token => {
                 if(!token){
@@ -47,8 +47,7 @@ export class userService{
                 const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
                 return this.http.get<usersResponse>(this.API_URL, {headers});
-            }),
-            map(response => response.user)
+            })
         );
     }
 
@@ -60,7 +59,7 @@ export class userService{
                 }
                 const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-                return this.http.post<any>(this.API_URL, {headers} );
+                return this.http.post<any>(this.API_URL, user, {headers} );
             })
         )
     }
@@ -82,11 +81,11 @@ export class userService{
         return user.id ? this.update(user) : this.add(user);
     }
 
-    remove(user: User): Observable<any>{
+    remove(userId: string): Observable<any>{
         return from(this.authService.getToken()).pipe(
             switchMap(token => {
                 const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-                return this.http.delete<any>(`${this.API_URL}/${user.id}`, { headers });
+                return this.http.delete<any>(`${this.API_URL}/${userId}`, { headers });
             })
         ) 
     }

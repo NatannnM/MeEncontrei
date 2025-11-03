@@ -8,6 +8,9 @@ import { alertFormComponent } from '../../alert/alert-form.component';
 import { eventsService } from '../../event/event-services/event.service';
 import { Event } from '../../event/models/event.type';
 import { UserAlertEventComponent } from '../../alert/user-alert-event.component';
+import { AlertFormEventComponent } from '../../alert/alert-form-event.component';
+import { User } from '../models/user.type';
+import { userService } from '../user-services/user.service';
 
 
 @Component({
@@ -36,13 +39,18 @@ export class AdminManagementComponent  implements OnInit, ViewDidEnter {
   pesquisaEvent: Event[] = [];
   event: Event = {} as Event;
 
+  userList: User[] = [];
+  pesquisaUser: User[] = [];
+  user: User = {} as User;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private toastController: ToastController,
     private establishmentService: EstablishmentService,
     private eventService: eventsService,
     private router: Router,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private userService: userService
   ) { 
     this.opcao = this.activatedRoute.snapshot.params['opcao'];
   }
@@ -85,7 +93,23 @@ export class AdminManagementComponent  implements OnInit, ViewDidEnter {
         }
       })
     } else {
-
+      this.userService.getList().subscribe({
+        next: (response) => {
+          this.userList = response.user;
+          this.pesquisaUser = [...this.userList];
+        },
+        error: (error) => {
+          this.toastController.create({
+            message: error.error.message,
+            header: 'Erro ao carregar lista de usuários',
+            color: 'danger',
+            position: 'top',
+            duration: 3000
+          }).then(toast => toast.present())
+          console.error(error);
+          console.error(error.error.details);
+        }
+      })
     }
   }
 
@@ -110,7 +134,14 @@ export class AdminManagementComponent  implements OnInit, ViewDidEnter {
         evt.name.toLowerCase().includes(termo)
       );
     } else{
+      if(termo === '' ){
+        this.pesquisaUser = [...this.userList];
+        return;
+      } 
 
+      this.pesquisaUser = this.userList.filter((user) => 
+        user.username.toLowerCase().includes(termo)
+      );
     }
   }
 
@@ -160,6 +191,35 @@ export class AdminManagementComponent  implements OnInit, ViewDidEnter {
               },
               error: (err) => {
                 this.exibirToast('Ocorreu um erro ao remover o evento.');
+              }
+            });
+          }
+        },
+        {
+          side: 'end',
+          text: 'cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await toast.present();
+    } else{
+      const toast = await this.toastController.create({
+      message: `Tem certeza que deseja apagar esse Usuário e todos os seus vínculos?`,
+      position: 'bottom',
+      buttons: [
+        {
+          side: 'end',
+          text: 'confirmar',
+          handler: () => {
+            this.userService.remove(id).subscribe({
+              next: () => {
+                this.exibirToast('Usuário excluído com sucesso!');
+                this.router.navigate(['admin']);
+              },
+              error: (err) => {
+                this.exibirToast('Ocorreu um erro ao remover o usuário.');
               }
             });
           }
@@ -314,7 +374,7 @@ export class AdminManagementComponent  implements OnInit, ViewDidEnter {
       await modal.present();
     } else if(this.opcao === 'evento'){
       const modal = await this.modalController.create({
-        component: alertFormComponent,
+        component: AlertFormEventComponent,
         componentProps: {
           alertData: this.alertData,
           eventId: id

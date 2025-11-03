@@ -7,6 +7,7 @@ import { MaskitoDirective } from "@maskito/angular";
 import { alertFormComponent } from "./alert-form.component";
 import { UserAlertComponent } from "./user-alert.component";
 import { UserAlertEventComponent } from "./user-alert-event.component";
+import { AlertFormEventComponent } from "./alert-form-event.component";
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { UserAlertEventComponent } from "./user-alert-event.component";
   ],
   declarations: [
     alertFormComponent,
+    AlertFormEventComponent,
     UserAlertComponent,
     UserAlertEventComponent
   ],
