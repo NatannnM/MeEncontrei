@@ -21,7 +21,6 @@ export class EstablishmentFormComponent implements OnInit {
     description: new FormControl('', [Validators.required, Validators.minLength(20), Validators.maxLength(800)]),
     owner: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
     photo: new FormControl('', Validators.required),
-    map: new FormControl('', Validators.required),
     public: new FormControl(''),
   });
 
@@ -53,7 +52,6 @@ export class EstablishmentFormComponent implements OnInit {
               description: response.facility.description,
               owner: response.facility.owner,
               photo: '',
-              map: '',
               public: ''
             });
           }
@@ -75,7 +73,7 @@ export class EstablishmentFormComponent implements OnInit {
 
   ngOnInit() { }
 
-  arquivoSelecionado(event: Event, controlName: 'photo' | 'map'): void {
+  arquivoSelecionado(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     if (input.files && input.files.length > 0) {
@@ -85,7 +83,7 @@ export class EstablishmentFormComponent implements OnInit {
       reader.onload = () => {
         const base64String = reader.result as string;
 
-        this.establishmentForm.get(controlName)?.setValue(base64String);
+        this.establishmentForm.get('photo')?.setValue(base64String);
       };
 
       reader.readAsDataURL(file);

@@ -50,7 +50,11 @@ const routes: Routes = [
   {
     path: 'alert',
     component: alertFormComponent
+  },  {
+    path: 'mapas',
+    loadChildren: () => import('./pages/mapas/mapas.module').then( m => m.MapasPageModule)
   }
+
 
 
   // {

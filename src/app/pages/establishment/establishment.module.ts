@@ -11,6 +11,7 @@ import { EstablishmentPageRoutingModule } from './establishment-routing.module';
 import { EstablishmentDetailsComponent } from './establishment-details/establishment-details.component';
 import { EstablishmentFormComponent } from './establishment-form/establishment-form.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MapasPageModule } from '../mapas/mapas.module';
 
 @NgModule({
   imports: [
@@ -21,11 +22,12 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     EstablishmentPageRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MapasPageModule
   ],
   declarations: [
     EstablishmentPage,
-    EstablishmentFormComponent
+    EstablishmentFormComponent,
   ]
 })
 export class EstablishmentPageModule { }

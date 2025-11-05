@@ -85,18 +85,9 @@
 
       <ion-item>
         <ion-input formControlName="photo" labelPlacement="floating" label="Foto do Estabelecimento:"
-          (change)="arquivoSelecionado($event, 'photo')" type="file"></ion-input>
+          (change)="arquivoSelecionado($event)" type="file"></ion-input>
         <p class="error-message">
           @if(hasError('photo_url','required')){
-          O campo é obrigatório
-          }
-        </p>
-      </ion-item>
-      <ion-item>
-        <ion-input formControlName="map" labelPlacement="floating" label="Planta Baixa do Estabelecimento:"
-          (change)="arquivoSelecionado($event, 'map')" type="file"></ion-input>
-        <p class="error-message">
-          @if(hasError('map','required')){
           O campo é obrigatório
           }
         </p>

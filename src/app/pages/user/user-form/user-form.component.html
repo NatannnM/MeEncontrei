@@ -50,22 +50,9 @@
           (change)="arquivoSelecionado($event)" type="file"></ion-input>
       </ion-item>
 
-      <ion-item [ngClass]="{'hidden': user?.id === userId}">
-        <ion-label position="stacked">Função:</ion-label>
-        <ion-select formControlName="role" interface="popover">
-          <ion-select-option value="USER"> Usuário</ion-select-option>
-          <ion-select-option value="ADMIN"> Administrador</ion-select-option>
-        </ion-select>
-        <p class="error-message">
-          @if(hasError('role', 'required')){
-            O cargo é obrigatório
-          }
-        </p>
-        <ion-note slot="error" *ngIf="hasError('role', 'required')">Cargo é obrigatório</ion-note>
-      </ion-item>
     </ion-list>
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button [disabled]="userForm.invalid" (click)="save()">
+      <ion-fab-button (click)="save()">
         <ion-icon name="checkmark"></ion-icon>
       </ion-fab-button>
     </ion-fab>

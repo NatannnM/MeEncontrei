@@ -107,7 +107,7 @@ export class EstablishmentDetailsComponent implements OnInit, ViewDidEnter {
   }
 
   editar_mapa() {
-    this.router.navigate(['../establishment-maps']);
+    this.router.navigate(['../../mapas']);
   }
 
   acessar_mapa() {

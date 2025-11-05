@@ -6,6 +6,8 @@ import { EstablishmentDetailsComponent } from './establishment-details/establish
 import { EstablishmentMapsComponent } from './establishment-maps/establishment-maps.component';
 import { EstablishmentFormComponent } from './establishment-form/establishment-form.component';
 import { AdminManagementComponent } from '../user/admin-management/admin-management.component';
+import { MapasPageModule } from '../mapas/mapas.module';
+import { MapasPage } from '../mapas/mapas.page';
 
 const routes: Routes = [
   {
@@ -23,6 +25,10 @@ const routes: Routes = [
   {
     path: 'adminManagement/:opcao',
     component: AdminManagementComponent
+  },
+  {
+    path: 'mapas/:id_establishment/:modo',
+    component: MapasPage
   }
 ];
 

@@ -25,7 +25,7 @@
                 <ion-icon slot="end" name="add-circle-outline"></ion-icon>
               </ion-button>
               
-              <ion-button expand="block" shape="round" (click)="editar_mapa()" *ngIf="estUser.creator === true && estUser.id_user === currentUser.id">
+              <ion-button expand="block" shape="round" [routerLink]="['/establishment/mapas', establishment.id, 'editar']" *ngIf="estUser.creator === true && estUser.id_user === currentUser.id">
                 Editar mapa
                 <ion-icon slot="end" name="create-outline"></ion-icon>
               </ion-button>
@@ -35,7 +35,7 @@
                 <ion-icon slot="end" name="download-outline"></ion-icon>
               </ion-button>
             </div>
-            <ion-button expand="block" shape="round" (click)="acessar_mapa()">
+            <ion-button expand="block" shape="round" [routerLink]="['/establishment/mapas', establishment.id, 'exibir']">
               Acesse o Mapa
               <ion-icon slot="end" name="map-outline"></ion-icon>
             </ion-button>
