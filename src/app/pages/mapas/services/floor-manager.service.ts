@@ -3,25 +3,36 @@ import { MapasPage } from "../mapas.page";
 import { Floor } from "../models/floor.model";
 import { iconColors } from "../utils/map-style";
 import { InfoWindowService } from "./info-window.service";
+import { EstablishmentService } from "../../establishment/establishment-services/establishment.service";
+import { Establishment } from "../../establishment/models/establishment.type";
+import { ToastController, ViewWillLeave } from "@ionic/angular";
 
-export class FloorManager {
-  map: google.maps.Map;
+export class FloorManager implements ViewWillLeave {
   floors: Floor[];
   currentFloorIndex: number;
+  establishment: Establishment;
 
   controlDiv: HTMLDivElement;
   sideBar?: HTMLDivElement;
-
+  
   controlShapesDiv: HTMLDivElement;
   private deleteShapeBtn!: HTMLButtonElement;
-  
+
   controlSaveDiv: HTMLDivElement;
 
-  controlReturnDiv: HTMLDivElement;
+  //controlReturnDiv: HTMLDivElement;
 
   private editableShape: any = null;
 
-  constructor(map: google.maps.Map, private router: Router, private establishmentId: string) {
+  constructor(
+    private map: google.maps.Map | null,
+    private router: Router,
+    private establishmentId: string,
+    private establishmentService: EstablishmentService,
+    private toastController: ToastController,
+    private est: Establishment
+  ) {
+    this.establishment = { id: '', location: '', city: '', name: '', description: '', owner: '', photo: '', map: '', image: '', public: 'PRIVATE' };
     this.map = map;
     this.floors = [
       { name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },
@@ -30,26 +41,36 @@ export class FloorManager {
 
     // Botão de andares
     this.controlDiv = this.createControlContainer();
-    this.map.controls[google.maps.ControlPosition.LEFT_CENTER].push(this.controlDiv);
+    if(this.map){
+      this.map.controls[google.maps.ControlPosition.LEFT_CENTER].push(this.controlDiv);
+    }
+    
 
     // Botão de controle dos shapes
     this.controlShapesDiv = this.createControlShapesDiv();
-    this.map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(this.controlShapesDiv);
+    if(this.map){
+      this.map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(this.controlShapesDiv);
+    }
     this.deleteShapeBtn = this.controlShapesDiv.querySelector("button") as HTMLButtonElement;
 
     // Botão de salvar
     this.controlSaveDiv = this.createControlSaveDiv();
     if (MapasPage.editMode) {
-      this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this.controlSaveDiv);
+      if(this.map){
+        this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this.controlSaveDiv);
+      }
     }
 
     // Botão de voltar página
-    this.controlReturnDiv = this.createReturnContainer();
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.controlReturnDiv);
+    /*this.controlReturnDiv = this.createReturnContainer();
+    if(this.map){
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.controlReturnDiv);
+    }*/
 
     this.renderFloors();
-
-    google.maps.event.addListener(this.map, "click", () => this.closeSideBar());
+    if(this.map){
+      google.maps.event.addListener(this.map, "click", () => this.closeSideBar());
+    }
 
     document.addEventListener("click", (event: MouseEvent) => {
       if (!this.sideBar) return;
@@ -58,9 +79,18 @@ export class FloorManager {
       if (this.controlDiv.contains(target)) return;
       this.closeSideBar();
     });
+    console.log(this.est);
+    this.insertMapShapes(JSON.parse(this.est.map));
   }
 
-  private createReturnContainer(): HTMLDivElement {
+  ionViewWillLeave() {
+    if (this.map) {
+      google.maps.event.clearInstanceListeners(this.map);
+      this.map = null;
+    }
+  }
+
+  /*private createReturnContainer(): HTMLDivElement {
     const div = document.createElement("div");
     div.style.display = "flex";
     div.style.flexDirection = "row";
@@ -89,11 +119,12 @@ export class FloorManager {
 
     button.addEventListener("click", () => {
       this.router.navigate(['/mapas/establishment', this.establishmentId]);
+      const mapas = new MapasPage();
     });
 
     div.appendChild(button);
     return div;
-  }
+  }*/
 
   private createControlContainer(): HTMLDivElement {
     const div = document.createElement("div");
@@ -250,9 +281,34 @@ export class FloorManager {
           }))
         }
       }));
-
-      console.log("Floors JSON:", JSON.stringify(floorsData, null, 2));
-      alert("Mapa salvo no console!");
+      this.establishment.id = this.establishmentId;
+      this.establishment.map = JSON.stringify(floorsData);
+      this.establishmentService.save({
+        ...this.establishment,
+      }).subscribe({
+        next: () => {
+          this.toastController.create({
+            message: 'Estabelecimento salvo com sucesso!',
+            duration: 3000,
+            position: 'bottom',
+            cssClass: 'toast-design'
+          }).then(toast => toast.present());
+        },
+        error: (error) => {
+          console.log(this.establishment);
+          this.toastController.create({
+            message: error.error.message,
+            header: 'Erro ao salvar o estabelecimento ' + this.establishment.name + '!',
+            color: 'danger',
+            position: 'top',
+            buttons: [
+              { text: 'X', role: 'cancel' }
+            ]
+          }).then(toast => toast.present())
+          console.error(error);
+          console.error(error.error.details);
+        }
+      })
 
     } catch (error) {
       console.error("Erro ao salvar mapa:", error);
@@ -735,7 +791,7 @@ export class FloorManager {
 
   private forceCenter(div: HTMLDivElement, horizontal: boolean, vertical: boolean) {
     if (!div) return;
-
+    if(!this.map) return;
     const mapDiv = this.map.getDiv() as HTMLDivElement;
 
     if (horizontal) {

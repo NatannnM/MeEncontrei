@@ -4,6 +4,11 @@ import { FloorManager } from './services/floor-manager.service';
 import { GoogleMapsLoader } from './services/google-maps-loader.service';
 import { InfoWindowService } from './services/info-window.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EstablishmentService } from '../establishment/establishment-services/establishment.service';
+import { ToastController, ViewDidEnter } from '@ionic/angular';
+import { Establishment } from '../establishment/models/establishment.type';
+import { firstValueFrom, switchMap } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/module.d-CnjH8Dlt';
 
 @Component({
   selector: 'app-mapas',
@@ -11,11 +16,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./mapas.page.scss'],
   standalone: false
 })
-export class MapasPage implements AfterViewInit {
+export class MapasPage implements AfterViewInit{
   map!: google.maps.Map;
   floorManager!: FloorManager;
   static editMode: boolean = true;
-  
+  est!: Establishment;
+
   eventId: string = '';
   establishmentId: string = '';
   modo: string = '';
@@ -23,26 +29,32 @@ export class MapasPage implements AfterViewInit {
   constructor(
     private mapsLoader: GoogleMapsLoader,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private establishmentService: EstablishmentService,
+    private toastController: ToastController
   ) {
     this.eventId = this.activatedRoute.snapshot.params['id_event'];
     this.establishmentId = this.activatedRoute.snapshot.params['id_establishment'];
     this.modo = this.activatedRoute.snapshot.params['modo'];
-    if(this.modo === 'exibir'){
-      if(this.eventId){
-        MapasPage.editMode = false;  
-      }else{
-        MapasPage.editMode = false; 
+    if (this.modo === 'exibir') {
+      if (this.eventId) {
+        MapasPage.editMode = false;
+      } else {
+        MapasPage.editMode = false;
       }
     } else {
-      if(this.eventId){
-        MapasPage.editMode = true; 
-      }else{
-        MapasPage.editMode = true; 
+      if (this.eventId) {
+        MapasPage.editMode = true;
+      } else {
+        MapasPage.editMode = true;
       }
     }
-      
-   }
+
+  }
+
+  goBack(){
+    this.router.navigate(['/mapas/establishment', this.establishmentId]);
+  }
 
   async ngAfterViewInit() {
     await this.mapsLoader.load();
@@ -51,10 +63,26 @@ export class MapasPage implements AfterViewInit {
     if (MapasPage.editMode) {
       this.initDrawing();
     }
-    this.floorManager = new FloorManager(this.map, this.router, this.establishmentId);
-    this.floorManager.insertMapShapes(mapaEsucriShapes);
-  }
+    try {
+      const response = await firstValueFrom(
+        this.establishmentService.getById(this.establishmentId)
+      );
+      this.est = response.facility;
+    } catch (error) {
+      const err = error as HttpErrorResponse;
 
+      const toast = await this.toastController.create({
+        message: err.error.message ?? '',
+        header: 'Erro ao carregar estabelecimento!',
+        color: 'danger',
+        duration: 3000,
+      });
+      toast.present();
+    }
+    console.log(this.est);
+    this.floorManager = new FloorManager(this.map, this.router, this.establishmentId, this.establishmentService, this.toastController, this.est);
+
+  }
   private initMap(): void {
     const mapOptions: google.maps.MapOptions = {
       center: { lat: -28.681528266431894, lng: -49.37356673246187 },
@@ -63,18 +91,34 @@ export class MapasPage implements AfterViewInit {
       mapTypeId: "roadmap",
       disableDefaultUI: true,
       styles: cleanMapStyle,
-      // restriction: HomePage.editMode ? undefined : {
-      //   latLngBounds: {
-      //     north: -28.6718,
-      //     south: -28.6722,
-      //     east: -49.3731,
-      //     west: -49.3735
-      //   },
-      //   strictBounds: true
-      // }
+      restriction: MapasPage.editMode ? undefined : {
+        latLngBounds: {
+          north: -28.681528266431894 + 0.000649, // norte
+          south: -28.681528266431894 - 0.000649, // sul
+          east: -49.37356673246187 + 0.000610,  // leste
+          west: -49.37356673246187 - 0.000610   // oeste
+        },
+        strictBounds: true
+      }
     }
 
     this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, mapOptions);
+    
+    const button = document.createElement("button");
+    button.innerHTML = "← Voltar";
+    button.style.background = "#4CAF50";
+    button.style.color = "#fff";
+    button.style.border = "none";
+    button.style.borderRadius = "8px";
+    button.style.padding = "6px 12px";
+    button.style.cursor = "pointer";
+    button.style.fontSize = "14px";
+    button.style.fontWeight = "bold";
+    button.style.transition = "background-color 0.2s ease";
+
+    button.addEventListener("click", () => {
+      this.router.navigate(['/mapas/establishment', this.establishmentId]);
+    });
 
     this.addBuildingOverlay();
   }

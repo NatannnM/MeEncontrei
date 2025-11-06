@@ -11,6 +11,7 @@ import { User } from '../../user/models/user.type';
 import { EstablishmentUserService } from '../establishment-services/establishmentUser.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EstablishmentUser } from '../models/establishmentUser.type';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-establishment-details',
@@ -38,7 +39,7 @@ export class EstablishmentDetailsComponent implements OnInit, ViewDidEnter {
     private authService: AuthService
   ) {
     this.carregarUsuario();
-    
+
   }
 
   async ionViewDidEnter(): Promise<void> {
@@ -79,11 +80,11 @@ export class EstablishmentDetailsComponent implements OnInit, ViewDidEnter {
     });
   }
 
-  async carregarUsuario(){
+  async carregarUsuario() {
     try {
       const dadosUsuario = await this.authService.getUserData();
       this.currentUser = dadosUsuario.user;
-    } catch(err) {
+    } catch (err) {
       console.error('Erro ao carregar dados do usuário', err);
     }
   }
@@ -106,12 +107,50 @@ export class EstablishmentDetailsComponent implements OnInit, ViewDidEnter {
     }
   }
 
-  editar_mapa() {
-    this.router.navigate(['../../mapas']);
+  /*async inserir_mapa(){
+    const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const conteudo = await lerArquivo(file);
+    const json = JSON.parse(conteudo);
+    console.log("Arquivo lido com sucesso:", json);
+    alert("Arquivo carregado! Veja o console.");
+  } catch (erro) {
+    console.error("Erro ao ler o arquivo:", erro);
+    alert("Falha ao ler o arquivo ou JSON inválido.");
   }
 
-  acessar_mapa() {
-    this.router.navigate(['../establishment-maps']);
+    return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+
+    reader.readAsText(file); // lê como texto (pode ser JSON)
+  });
+  }*/
+
+  async baixar_mapa() {
+    const json = this.establishment.map;
+
+    if ((window as any).Capacitor?.isNativePlatform()) {
+      await Filesystem.writeFile({
+        path: 'dados.json',
+        data: json,
+        directory: Directory.Documents,
+        encoding: Encoding.UTF8,
+      });
+      alert('Arquivo salvo no dispositivo!');
+    } else {
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'dados.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
   }
 
   ngOnInit() { }

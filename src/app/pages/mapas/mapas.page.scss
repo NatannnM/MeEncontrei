@@ -20,3 +20,37 @@
 .custom-map-btn:hover {
   background-color: #eee;
 }
+
+.button {
+  position: absolute;
+  display: inline-flex; /* ou flex, se necessário */
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  margin-left: 10px;
+  background: #fff;
+  border: 2px solid #4CAF50;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+  /* Garantir que o botão fique no fluxo da página */
+  z-index: 1; /* Garante que o botão fique visível acima de outros elementos */
+}
+
+.button button {
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.button button:hover {
+  background-color: #45a049;
+}

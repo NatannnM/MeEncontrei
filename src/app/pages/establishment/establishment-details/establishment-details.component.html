@@ -30,7 +30,7 @@
                 <ion-icon slot="end" name="create-outline"></ion-icon>
               </ion-button>
 
-              <ion-button expand="block" shape="round" (click)="editar_mapa()" *ngIf="estUser.creator === true && estUser.id_user === currentUser.id">
+              <ion-button expand="block" shape="round" (click)="baixar_mapa()" *ngIf="estUser.creator === true && estUser.id_user === currentUser.id">
                 Baixar mapa
                 <ion-icon slot="end" name="download-outline"></ion-icon>
               </ion-button>
