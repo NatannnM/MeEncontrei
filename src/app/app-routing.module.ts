@@ -37,7 +37,7 @@ const routes: Routes = [
   },
   {
     path: 'user',
-    loadChildren: () => import('./pages/user/user.module').then( m => m.UserPageModule)
+    loadChildren: () => import('./pages/user/user.module').then(m => m.UserPageModule)
   },
   {
     path: 'admin',
@@ -50,10 +50,16 @@ const routes: Routes = [
   {
     path: 'alert',
     component: alertFormComponent
-  },  {
+  },
+  {
     path: 'mapas',
-    loadChildren: () => import('./pages/mapas/mapas.module').then( m => m.MapasPageModule)
+    loadChildren: () => import('./pages/mapas/mapas.module').then(m => m.MapasPageModule)
+  },
+  {
+    path: 'mapas/:id_establishment/:modo',
+    loadChildren: () => import('./pages/mapas/mapas.module').then(m => m.MapasPageModule)
   }
+
 
 
 

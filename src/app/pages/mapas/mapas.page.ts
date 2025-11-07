@@ -1,14 +1,28 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { cleanMapStyle, iconColors, mapaEsucriShapes } from './utils/map-style';
 import { FloorManager } from './services/floor-manager.service';
 import { GoogleMapsLoader } from './services/google-maps-loader.service';
 import { InfoWindowService } from './services/info-window.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EstablishmentService } from '../establishment/establishment-services/establishment.service';
-import { ToastController, ViewDidEnter } from '@ionic/angular';
+import { NavController, ToastController, ViewDidEnter } from '@ionic/angular';
 import { Establishment } from '../establishment/models/establishment.type';
 import { firstValueFrom, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/module.d-CnjH8Dlt';
+import { Floor } from './models/floor.model';
+import { ShapeData } from './models/shape.model';
+
+interface Marker {
+  centered: boolean;
+  zoom: number;
+  position: { lat: number; lng: number };
+}
+
+interface FloorData {
+  shapes: {
+    markers: Marker;
+  };
+}
 
 @Component({
   selector: 'app-mapas',
@@ -16,7 +30,7 @@ import { HttpErrorResponse } from '@angular/common/module.d-CnjH8Dlt';
   styleUrls: ['./mapas.page.scss'],
   standalone: false
 })
-export class MapasPage implements AfterViewInit{
+export class MapasPage implements OnInit, AfterViewInit {
   map!: google.maps.Map;
   floorManager!: FloorManager;
   static editMode: boolean = true;
@@ -25,17 +39,48 @@ export class MapasPage implements AfterViewInit{
   eventId: string = '';
   establishmentId: string = '';
   modo: string = '';
+  mapaInserido: string = '';
+  conteudoParams: string = '';
+  conteudo: string = '';
+
+  zoomRecebido!: number;
+  centerRecebido!: { lat: number; lng: number };
 
   constructor(
     private mapsLoader: GoogleMapsLoader,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private establishmentService: EstablishmentService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private navCtrl: NavController
   ) {
     this.eventId = this.activatedRoute.snapshot.params['id_event'];
     this.establishmentId = this.activatedRoute.snapshot.params['id_establishment'];
     this.modo = this.activatedRoute.snapshot.params['modo'];
+
+    const nav = this.router.getCurrentNavigation();
+    this.conteudoParams = nav?.extras.state?.['conteudo'];
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.mapaInserido = params['conteudo'];  // O JSON codificado
+    });
+
+    /*this.aleatorio = floor.shapes.markers.map(m => {
+      m.centered ? m.zoom : 
+    }
+      ({
+        position: {
+          lat: m.mapObject.getPosition()?.lat() ?? 0,
+          lng: m.mapObject.getPosition()?.lng() ?? 0
+        },
+        centered: m.centered,
+        zoom: m.zoom,
+        name: m.name,
+        icon: m.icon,
+        description: m.description,
+      })),
+  }))*/
+
     if (this.modo === 'exibir') {
       if (this.eventId) {
         MapasPage.editMode = false;
@@ -52,22 +97,39 @@ export class MapasPage implements AfterViewInit{
 
   }
 
-  goBack(){
+  recuperarZoomCenter(conteudo: string) {
+    const valores = JSON.parse(conteudo).map((f: any) => {
+      console.log('f dentro do map:', f);
+      if (f.shapes && f.shapes.markers) {
+        const marker = f.shapes.markers.find((m: any) => m.centered);
+        if (marker) {
+          console.log('marker: ', marker);
+          return { zoom: marker.zoom, center: marker.position };
+        }
+      }
+      return null; // Caso não encontre um marcador com 'centered: true'
+    }).filter((item: any) => item !== null);
+    this.zoomRecebido = valores.length === 0 ? 8 : valores[0].zoom;
+    this.centerRecebido = valores.length === 0 ? { lat: -28.681528266431894, lng: -49.37356673246187 } : valores[0].center;
+  }
+
+  goBack() {
     this.router.navigate(['/mapas/establishment', this.establishmentId]);
   }
 
-  async ngAfterViewInit() {
-    await this.mapsLoader.load();
-    this.initMap();
-    // this.addUserLocationMarker();
-    if (MapasPage.editMode) {
-      this.initDrawing();
-    }
+  async ngOnInit() {
     try {
-      const response = await firstValueFrom(
-        this.establishmentService.getById(this.establishmentId)
-      );
-      this.est = response.facility;
+      if (!this.conteudoParams) {
+        const response = await firstValueFrom(
+          this.establishmentService.getById(this.establishmentId)
+        );
+        this.est = response.facility;
+        this.recuperarZoomCenter(this.est.map);
+      } else {
+        this.est = { id: '', location: '', city: '', name: '', description: '', owner: '', photo: '', map: this.conteudoParams, image: '', public: 'PRIVATE' };
+        this.recuperarZoomCenter(this.est.map);
+      }
+
     } catch (error) {
       const err = error as HttpErrorResponse;
 
@@ -79,14 +141,23 @@ export class MapasPage implements AfterViewInit{
       });
       toast.present();
     }
-    console.log(this.est);
-    this.floorManager = new FloorManager(this.map, this.router, this.establishmentId, this.establishmentService, this.toastController, this.est);
+    await this.mapsLoader.load();
+    this.initMap();
+    this.addUserLocationMarker();
+    if (MapasPage.editMode) {
+      this.initDrawing();
+    }
+    this.floorManager = new FloorManager(this.map, this.router, this.establishmentId, this.establishmentService, this.toastController, this.est, this.navCtrl);
+  }
+
+  async ngAfterViewInit() {
 
   }
+
   private initMap(): void {
     const mapOptions: google.maps.MapOptions = {
-      center: { lat: -28.681528266431894, lng: -49.37356673246187 },
-      zoom: 20,
+      center: this.centerRecebido,
+      zoom: this.zoomRecebido,
       minZoom: MapasPage.editMode ? undefined : 19,
       mapTypeId: "roadmap",
       disableDefaultUI: true,
@@ -103,50 +174,9 @@ export class MapasPage implements AfterViewInit{
     }
 
     this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, mapOptions);
-    
-    const button = document.createElement("button");
-    button.innerHTML = "← Voltar";
-    button.style.background = "#4CAF50";
-    button.style.color = "#fff";
-    button.style.border = "none";
-    button.style.borderRadius = "8px";
-    button.style.padding = "6px 12px";
-    button.style.cursor = "pointer";
-    button.style.fontSize = "14px";
-    button.style.fontWeight = "bold";
-    button.style.transition = "background-color 0.2s ease";
 
-    button.addEventListener("click", () => {
-      this.router.navigate(['/mapas/establishment', this.establishmentId]);
-    });
-
-    this.addBuildingOverlay();
   }
 
-  private addBuildingOverlay(): void {
-    if (!this.map) return;
-
-    const imageBounds = {
-      north: -28.681362,  // -28.681333 - 0.00003
-      south: -28.681670,  // -28.681641 - 0.00003
-      east: -49.37337,    // -49.37335 - 0.00003
-      west: -49.37377     // -49.37375 - 0.00003
-    };
-
-    const overlay = new google.maps.GroundOverlay("./assets/imagemMapa1.png", imageBounds);
-    const overlay2 = new google.maps.GroundOverlay("./assets/imagemMapa2.png", imageBounds);
-    const overlay3 = new google.maps.GroundOverlay("./assets/imagemMapa3.png", imageBounds);
-    const overlay4 = new google.maps.GroundOverlay("./assets/imagemMapa4.png", imageBounds);
-    const overlay5 = new google.maps.GroundOverlay("./assets/imagemMapa5.png", imageBounds);
-    const overlay6 = new google.maps.GroundOverlay("./assets/imagemMapa6.png", imageBounds);
-
-    // overlay.setMap(this.map);
-    // overlay2.setMap(this.map);
-    // overlay3.setMap(this.map);
-    // overlay4.setMap(this.map);
-    // overlay5.setMap(this.map);
-    // overlay6.setMap(this.map);
-  }
 
   private initDrawing(): void {
     const map = this.map;
@@ -200,6 +230,8 @@ export class MapasPage implements AfterViewInit{
     google.maps.event.addListener(drawingManager, "markercomplete", (marker: google.maps.Marker) => {
       this.floorManager.addShapesToCurrentFloor("marker", { mapObject: marker, centered: false, zoom: 20, icon: 1, name: "Novo Marcador", description: "" });
       this.floorManager.setEditable(marker);
+      console.log('Marcador lat', marker.getPosition()?.lat());
+      console.log('Marcador lng', marker.getPosition()?.lng());
 
       google.maps.event.addListener(marker, "click", () => {
         const markerData = this.floorManager.floors[this.floorManager.currentFloorIndex].shapes.markers
@@ -248,7 +280,6 @@ export class MapasPage implements AfterViewInit{
       this.floorManager.addShapesToCurrentFloor("polyline", { mapObject: polyline });
 
       this.floorManager.setEditable(polyline);
-
       google.maps.event.addListener(polyline, "click", () => {
         this.floorManager.setEditable(polyline);
       });

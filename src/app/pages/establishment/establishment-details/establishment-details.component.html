@@ -18,9 +18,9 @@
         <ion-card class="actions-card">
           <ion-card-content>
             <div *ngFor="let estUser of establishmentUser;">
-              <ion-button expand="block" shape="round" (click)="onFileSelected($event)" *ngIf="estUser.creator === true && estUser.id_user === currentUser.id">
+              <ion-button expand="block" shape="round" *ngIf="estUser.creator === true && estUser.id_user === currentUser.id">
                 Inserir mapa
-                <input type="file" accept=".txt" (change)="onFileSelected($event)"
+                <input type="file" accept=".txt" (change)="inserir_mapa($event)"
                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;" />
                 <ion-icon slot="end" name="add-circle-outline"></ion-icon>
               </ion-button>

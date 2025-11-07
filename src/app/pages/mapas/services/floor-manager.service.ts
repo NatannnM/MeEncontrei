@@ -5,24 +5,27 @@ import { iconColors } from "../utils/map-style";
 import { InfoWindowService } from "./info-window.service";
 import { EstablishmentService } from "../../establishment/establishment-services/establishment.service";
 import { Establishment } from "../../establishment/models/establishment.type";
-import { ToastController, ViewWillLeave } from "@ionic/angular";
+import { NavController, ToastController, ViewWillLeave } from "@ionic/angular";
 
-export class FloorManager implements ViewWillLeave {
+export class FloorManager {
   floors: Floor[];
   currentFloorIndex: number;
   establishment: Establishment;
 
   controlDiv: HTMLDivElement;
   sideBar?: HTMLDivElement;
-  
+
   controlShapesDiv: HTMLDivElement;
   private deleteShapeBtn!: HTMLButtonElement;
 
   controlSaveDiv: HTMLDivElement;
 
-  //controlReturnDiv: HTMLDivElement;
+  controlReturnDiv: HTMLDivElement;
 
   private editableShape: any = null;
+
+  toastOnScreenAdd: boolean = false;
+  toastOnScreenRemove: boolean = false;
 
   constructor(
     private map: google.maps.Map | null,
@@ -30,7 +33,8 @@ export class FloorManager implements ViewWillLeave {
     private establishmentId: string,
     private establishmentService: EstablishmentService,
     private toastController: ToastController,
-    private est: Establishment
+    private est: Establishment,
+    private navCtrl: NavController
   ) {
     this.establishment = { id: '', location: '', city: '', name: '', description: '', owner: '', photo: '', map: '', image: '', public: 'PRIVATE' };
     this.map = map;
@@ -41,14 +45,14 @@ export class FloorManager implements ViewWillLeave {
 
     // Botão de andares
     this.controlDiv = this.createControlContainer();
-    if(this.map){
+    if (this.map) {
       this.map.controls[google.maps.ControlPosition.LEFT_CENTER].push(this.controlDiv);
     }
-    
+
 
     // Botão de controle dos shapes
     this.controlShapesDiv = this.createControlShapesDiv();
-    if(this.map){
+    if (this.map) {
       this.map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(this.controlShapesDiv);
     }
     this.deleteShapeBtn = this.controlShapesDiv.querySelector("button") as HTMLButtonElement;
@@ -56,19 +60,19 @@ export class FloorManager implements ViewWillLeave {
     // Botão de salvar
     this.controlSaveDiv = this.createControlSaveDiv();
     if (MapasPage.editMode) {
-      if(this.map){
+      if (this.map) {
         this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this.controlSaveDiv);
       }
     }
 
     // Botão de voltar página
-    /*this.controlReturnDiv = this.createReturnContainer();
-    if(this.map){
+    this.controlReturnDiv = this.createReturnContainer();
+    if (this.map) {
       this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.controlReturnDiv);
-    }*/
+    }
 
     this.renderFloors();
-    if(this.map){
+    if (this.map) {
       google.maps.event.addListener(this.map, "click", () => this.closeSideBar());
     }
 
@@ -83,14 +87,7 @@ export class FloorManager implements ViewWillLeave {
     this.insertMapShapes(JSON.parse(this.est.map));
   }
 
-  ionViewWillLeave() {
-    if (this.map) {
-      google.maps.event.clearInstanceListeners(this.map);
-      this.map = null;
-    }
-  }
-
-  /*private createReturnContainer(): HTMLDivElement {
+  private createReturnContainer(): HTMLDivElement {
     const div = document.createElement("div");
     div.style.display = "flex";
     div.style.flexDirection = "row";
@@ -118,13 +115,12 @@ export class FloorManager implements ViewWillLeave {
     button.style.transition = "background-color 0.2s ease";
 
     button.addEventListener("click", () => {
-      this.router.navigate(['/mapas/establishment', this.establishmentId]);
-      const mapas = new MapasPage();
+      this.navCtrl.back();
     });
 
     div.appendChild(button);
     return div;
-  }*/
+  }
 
   private createControlContainer(): HTMLDivElement {
     const div = document.createElement("div");
@@ -293,6 +289,7 @@ export class FloorManager implements ViewWillLeave {
             position: 'bottom',
             cssClass: 'toast-design'
           }).then(toast => toast.present());
+          this.navCtrl.back();
         },
         error: (error) => {
           console.log(this.establishment);
@@ -673,7 +670,15 @@ export class FloorManager implements ViewWillLeave {
 
   private addFloor(name?: string) {
     if (this.floors.length >= 9) {
-      alert("Limite de andares atingido");
+      if (!this.toastOnScreenAdd) {
+        this.toastController.create({
+          message: 'Limite de andares atingido!',
+          duration: 3000,
+          position: 'bottom',
+          cssClass: 'toast-design'
+        }).then(toast => toast.present());
+        this.toastOnScreenAdd = true;
+      }
       return;
     }
     const floorName = name || String(this.floors.length + 1);
@@ -685,11 +690,21 @@ export class FloorManager implements ViewWillLeave {
     this.removeAllShapesFromMap();
     this.renderFloors();
     this.forceCenter(this.controlDiv, false, true);
+    this.toastOnScreenRemove = false;
   }
 
   private removeFloor(index: number) {
     if (this.floors.length <= 1) {
-      alert("Você não pode apagar este andar");
+      if (!this.toastOnScreenRemove) {
+        this.toastController.create({
+          message: 'Você não pode apagar este andar!',
+          duration: 3000,
+          position: 'bottom',
+          cssClass: 'toast-design'
+        }).then(toast => toast.present())
+        this.toastOnScreenRemove = true;
+      }
+
       this.renderFloors();
       return;
     };
@@ -701,6 +716,7 @@ export class FloorManager implements ViewWillLeave {
     this.addCurrentFloorShapes();
     this.renderFloors();
     this.forceCenter(this.controlDiv, false, true);
+    this.toastOnScreenAdd = false;
   }
 
   addShapesToCurrentFloor(shapeType: "marker" | "circle" | "rectangle" | "polygon" | "polyline", data: any) {
@@ -791,7 +807,7 @@ export class FloorManager implements ViewWillLeave {
 
   private forceCenter(div: HTMLDivElement, horizontal: boolean, vertical: boolean) {
     if (!div) return;
-    if(!this.map) return;
+    if (!this.map) return;
     const mapDiv = this.map.getDiv() as HTMLDivElement;
 
     if (horizontal) {

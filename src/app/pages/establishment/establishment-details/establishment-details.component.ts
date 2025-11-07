@@ -89,47 +89,37 @@ export class EstablishmentDetailsComponent implements OnInit, ViewDidEnter {
     }
   }
 
-  abrir_mapa() {
-    this.router.navigate(['../establishment-maps']);
+  lerArquivo(arquivo: any) {
+    return new Promise((resolve, reject) => {
+      const leitor = new FileReader();
+
+      leitor.onload = () => {
+        resolve(leitor.result);
+      };
+
+      leitor.onerror = () => {
+        reject(leitor.error);
+      };
+
+      leitor.readAsText(arquivo);
+    });
   }
 
-  onFileSelected(event: any) {
+  async inserir_mapa(event: any) {
     const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.mapData = reader.result as string;
-        this.router.navigate(['../establishment-maps']);
-      };
-      reader.readAsText(file);
+    try {
+      const conteudo = await this.lerArquivo(file);
+      this.router.navigate(['/mapas', this.establishment.id, 'editar'], {
+        state: { conteudo }
+      });
+
+    } catch (erro) {
+      console.error("Erro ao ler o arquivo:", erro);
+      alert("Falha ao ler o arquivo ou JSON inválido.");
     }
   }
-
-  /*async inserir_mapa(){
-    const file = event.target.files[0];
-  if (!file) return;
-
-  try {
-    const conteudo = await lerArquivo(file);
-    const json = JSON.parse(conteudo);
-    console.log("Arquivo lido com sucesso:", json);
-    alert("Arquivo carregado! Veja o console.");
-  } catch (erro) {
-    console.error("Erro ao ler o arquivo:", erro);
-    alert("Falha ao ler o arquivo ou JSON inválido.");
-  }
-
-    return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(reader.error);
-
-    reader.readAsText(file); // lê como texto (pode ser JSON)
-  });
-  }*/
 
   async baixar_mapa() {
     const json = this.establishment.map;
@@ -141,13 +131,15 @@ export class EstablishmentDetailsComponent implements OnInit, ViewDidEnter {
         directory: Directory.Documents,
         encoding: Encoding.UTF8,
       });
-      alert('Arquivo salvo no dispositivo!');
     } else {
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'dados.txt';
+
+      const regexInvalido = /[/\:*?"<>|]/;
+      
+      a.download = !regexInvalido.test(this.establishment.name) ? `${this.establishment.name}.txt` : "mapa.txt";
       a.click();
       URL.revokeObjectURL(url);
     }

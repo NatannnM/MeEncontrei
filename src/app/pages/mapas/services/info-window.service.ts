@@ -36,7 +36,7 @@ export class InfoWindowService {
 			let zoom = data.zoom;
 
 			zoomMinus?.addEventListener("click", () => {
-				if (zoom > 1) zoom--;
+				if (zoom > 19) zoom--;
 				if (zoomValue) zoomValue.textContent = zoom.toString();
 				if (map instanceof google.maps.Map) {
 					map.setZoom(zoom);
