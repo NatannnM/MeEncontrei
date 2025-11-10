@@ -5,6 +5,7 @@ import { EventPage } from './event.page';
 import { EventFormComponent } from './event-form/event-form.component';
 import { EventDetailsComponent } from './event-details/event-details.component';
 import { AdminManagementComponent } from '../user/admin-management/admin-management.component';
+import { MapasPage } from '../mapas/mapas.page';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'adminManagement/:opcao',
     component: AdminManagementComponent
+  },
+  {
+    path: 'mapas/:id_event/:modo',
+    component: MapasPage
   }
 ];
 

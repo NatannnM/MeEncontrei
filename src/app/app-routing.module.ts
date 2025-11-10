@@ -58,9 +58,11 @@ const routes: Routes = [
   {
     path: 'mapas/:id_establishment/:modo',
     loadChildren: () => import('./pages/mapas/mapas.module').then(m => m.MapasPageModule)
+  },
+  {
+    path: 'mapas/:id_event/:modo',
+    loadChildren: () => import('./pages/mapas/mapas.module').then(m => m.MapasPageModule)
   }
-
-
 
 
   // {

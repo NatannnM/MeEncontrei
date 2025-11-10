@@ -11,6 +11,8 @@ import { firstValueFrom, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/module.d-CnjH8Dlt';
 import { Floor } from './models/floor.model';
 import { ShapeData } from './models/shape.model';
+import { Event } from '../event/models/event.type';
+import { eventsService } from '../event/event-services/event.service';
 
 interface Marker {
   centered: boolean;
@@ -35,6 +37,7 @@ export class MapasPage implements OnInit, AfterViewInit {
   floorManager!: FloorManager;
   static editMode: boolean = true;
   est!: Establishment;
+  evt!: Event;
 
   eventId: string = '';
   establishmentId: string = '';
@@ -51,10 +54,12 @@ export class MapasPage implements OnInit, AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private establishmentService: EstablishmentService,
+    private eventService: eventsService,
     private toastController: ToastController,
     private navCtrl: NavController
   ) {
     this.eventId = this.activatedRoute.snapshot.params['id_event'];
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'+this.eventId);
     this.establishmentId = this.activatedRoute.snapshot.params['id_establishment'];
     this.modo = this.activatedRoute.snapshot.params['modo'];
 
@@ -82,23 +87,17 @@ export class MapasPage implements OnInit, AfterViewInit {
   }))*/
 
     if (this.modo === 'exibir') {
-      if (this.eventId) {
-        MapasPage.editMode = false;
-      } else {
-        MapasPage.editMode = false;
-      }
+      MapasPage.editMode = false;
     } else {
-      if (this.eventId) {
-        MapasPage.editMode = true;
-      } else {
-        MapasPage.editMode = true;
-      }
+      MapasPage.editMode = true;
     }
 
   }
 
   recuperarZoomCenter(conteudo: string) {
+    
     const valores = JSON.parse(conteudo).map((f: any) => {
+
       console.log('f dentro do map:', f);
       if (f.shapes && f.shapes.markers) {
         const marker = f.shapes.markers.find((m: any) => m.centered);
@@ -120,16 +119,42 @@ export class MapasPage implements OnInit, AfterViewInit {
   async ngOnInit() {
     try {
       if (!this.conteudoParams) {
-        const response = await firstValueFrom(
-          this.establishmentService.getById(this.establishmentId)
-        );
-        this.est = response.facility;
-        this.recuperarZoomCenter(this.est.map);
+        if (this.eventId) {
+          const response = await firstValueFrom(
+            this.eventService.getById(this.eventId)
+          );
+          this.evt = response.event;
+          console.log('evento:'+this.evt);
+          if (this.evt.map) {
+            this.recuperarZoomCenter(this.evt.map);
+          } else {
+            const response = await firstValueFrom(
+              this.establishmentService.getById(this.evt.id_facility)
+            );
+            this.est = response.facility;
+            this.evt.map = this.est.map;
+            this.recuperarZoomCenter(this.evt.map);
+          }
+        } else {
+          const response = await firstValueFrom(
+            this.establishmentService.getById(this.establishmentId)
+          );
+          this.est = response.facility;
+          this.recuperarZoomCenter(this.est.map);
+        }
       } else {
-        this.est = { id: '', location: '', city: '', name: '', description: '', owner: '', photo: '', map: this.conteudoParams, image: '', public: 'PRIVATE' };
-        this.recuperarZoomCenter(this.est.map);
+        if (this.eventId) {
+          const response = await firstValueFrom(
+            this.eventService.getById(this.eventId)
+          );
+          this.evt = response.event;
+          this.evt.map = this.conteudoParams;
+          this.recuperarZoomCenter(this.evt.map);
+        } else {
+          this.est = { id: '', location: '', city: '', name: '', description: '', owner: '', photo: '', map: this.conteudoParams, image: '', public: 'PRIVATE' };
+          this.recuperarZoomCenter(this.est.map);
+        }
       }
-
     } catch (error) {
       const err = error as HttpErrorResponse;
 
@@ -147,7 +172,7 @@ export class MapasPage implements OnInit, AfterViewInit {
     if (MapasPage.editMode) {
       this.initDrawing();
     }
-    this.floorManager = new FloorManager(this.map, this.router, this.establishmentId, this.establishmentService, this.toastController, this.est, this.navCtrl);
+    this.floorManager = new FloorManager(this.map, this.router, this.establishmentId, this.eventId, this.establishmentService, this.eventService, this.toastController, this.est, this.evt, this.navCtrl);
   }
 
   async ngAfterViewInit() {

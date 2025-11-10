@@ -6,11 +6,14 @@ import { InfoWindowService } from "./info-window.service";
 import { EstablishmentService } from "../../establishment/establishment-services/establishment.service";
 import { Establishment } from "../../establishment/models/establishment.type";
 import { NavController, ToastController, ViewWillLeave } from "@ionic/angular";
+import { Event } from "../../event/models/event.type";
+import { eventsService } from "../../event/event-services/event.service";
 
 export class FloorManager {
   floors: Floor[];
   currentFloorIndex: number;
   establishment: Establishment;
+  event?: Event
 
   controlDiv: HTMLDivElement;
   sideBar?: HTMLDivElement;
@@ -31,9 +34,12 @@ export class FloorManager {
     private map: google.maps.Map | null,
     private router: Router,
     private establishmentId: string,
+    private eventId: string,
     private establishmentService: EstablishmentService,
+    private eventService: eventsService,
     private toastController: ToastController,
     private est: Establishment,
+    private evt: Event,
     private navCtrl: NavController
   ) {
     this.establishment = { id: '', location: '', city: '', name: '', description: '', owner: '', photo: '', map: '', image: '', public: 'PRIVATE' };
@@ -84,7 +90,11 @@ export class FloorManager {
       this.closeSideBar();
     });
     console.log(this.est);
-    this.insertMapShapes(JSON.parse(this.est.map));
+    if (this.evt?.id) {
+      this.insertMapShapes(JSON.parse(this.evt.map));
+    } else {
+      this.insertMapShapes(JSON.parse(this.est.map));
+    }
   }
 
   private createReturnContainer(): HTMLDivElement {
@@ -277,35 +287,71 @@ export class FloorManager {
           }))
         }
       }));
-      this.establishment.id = this.establishmentId;
-      this.establishment.map = JSON.stringify(floorsData);
-      this.establishmentService.save({
-        ...this.establishment,
-      }).subscribe({
-        next: () => {
-          this.toastController.create({
-            message: 'Estabelecimento salvo com sucesso!',
-            duration: 3000,
-            position: 'bottom',
-            cssClass: 'toast-design'
-          }).then(toast => toast.present());
-          this.navCtrl.back();
-        },
-        error: (error) => {
-          console.log(this.establishment);
-          this.toastController.create({
-            message: error.error.message,
-            header: 'Erro ao salvar o estabelecimento ' + this.establishment.name + '!',
-            color: 'danger',
-            position: 'top',
-            buttons: [
-              { text: 'X', role: 'cancel' }
-            ]
-          }).then(toast => toast.present())
-          console.error(error);
-          console.error(error.error.details);
+      if (this.establishmentId) {
+        this.establishment.id = this.establishmentId;
+        this.establishment.map = JSON.stringify(floorsData);
+        this.establishmentService.save({
+          ...this.establishment,
+        }).subscribe({
+          next: () => {
+            this.toastController.create({
+              message: 'Estabelecimento salvo com sucesso!',
+              duration: 3000,
+              position: 'bottom',
+              cssClass: 'toast-design'
+            }).then(toast => toast.present());
+            this.navCtrl.back();
+          },
+          error: (error) => {
+            console.log(this.establishment);
+            this.toastController.create({
+              message: error.error.message,
+              header: 'Erro ao salvar o estabelecimento ' + this.establishment.name + '!',
+              color: 'danger',
+              position: 'top',
+              buttons: [
+                { text: 'X', role: 'cancel' }
+              ]
+            }).then(toast => toast.present())
+            console.error(error);
+            console.error(error.error.details);
+          }
+        })
+      } else {
+        if (this.evt) {
+          this.evt.id = this.eventId;
+          this.evt.map = JSON.stringify(floorsData);
+          this.eventService.save({
+            ...this.evt,
+          }).subscribe({
+            next: () => {
+              this.toastController.create({
+                message: 'Evento salvo com sucesso!',
+                duration: 3000,
+                position: 'bottom',
+                cssClass: 'toast-design'
+              }).then(toast => toast.present());
+              this.navCtrl.back();
+            },
+            error: (error) => {
+              console.log(this.evt);
+              this.toastController.create({
+                message: error.error.message,
+                header: 'Erro ao salvar o evento ' + this.evt.name + '!',
+                color: 'danger',
+                position: 'top',
+                buttons: [
+                  { text: 'X', role: 'cancel' }
+                ]
+              }).then(toast => toast.present())
+              console.error(error);
+              console.error(error.error.details);
+            }
+          })
         }
-      })
+      }
+
+
 
     } catch (error) {
       console.error("Erro ao salvar mapa:", error);
@@ -563,7 +609,7 @@ export class FloorManager {
 
     btnDuplicate.onclick = () => {
       const originalFloor = this.floors[index];
-      const clonedName = originalFloor.name[0] + "_copy";
+      const clonedName = originalFloor.name.toString()[0] + "_copy";
 
       this.addFloor(clonedName);
       const newFloor = this.floors[this.floors.length - 1];

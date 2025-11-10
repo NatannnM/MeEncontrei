@@ -10,6 +10,7 @@ import { EventPageRoutingModule } from './event-routing.module';
 import { EventPage } from './event.page';
 import { EventFormComponent } from './event-form/event-form.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MapasPageModule } from '../mapas/mapas.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { HttpClientModule } from '@angular/common/http';
     RouterModule,
     IonicModule,
     EventPageRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MapasPageModule
   ],
   declarations: [
     EventPage,

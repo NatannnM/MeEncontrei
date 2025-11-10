@@ -11,5 +11,6 @@ export type Event = {
   image: string,
   price: number,
   id_facility: string,
+  map: string;
   public: 'PRIVATE' | 'PUBLIC'
 }
