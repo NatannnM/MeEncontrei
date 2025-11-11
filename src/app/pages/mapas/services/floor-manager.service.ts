@@ -550,7 +550,7 @@ export class FloorManager {
             transform: scaleX(1.5);
             padding: 2px 4px;
             width: fit-content;
-            background: #D3D3D3;
+            
             border-width: 1.3px;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
@@ -561,7 +561,7 @@ export class FloorManager {
             display: inline-block;
             padding: 2px 4px;
             width: fit-content;
-            background:#D3D3D3;
+            
             border-width: 1.3px;
             line-height: 0.6; 
             transform: scaleX(1.5);
@@ -571,7 +571,7 @@ export class FloorManager {
       </div>
       <button class="btn-remove" style="background:#ff4d4d;color:#fff;border:none;border-radius:6px;padding:4px 8px;cursor:pointer;">🗑</button>
       <button class="btn-duplicate" style="background:#4CAF50;color:#fff;border:none;border-radius:6px;padding:4px 8px;cursor:pointer;">⧉</button>
-      <input type="text" class="floor-name" value="${this.floors[index].name}" style="flex:1;border:1px solid #ccc;border-radius:6px;padding:4px 6px;" />
+      <input type="text" class="floor-name" value="${this.floors[index].name}" style="color: black;background-color: white;flex:1;border:1px solid #000000ff;border-radius:6px;padding:4px 6px;" />
     `;
 
     wrapper.appendChild(panel);

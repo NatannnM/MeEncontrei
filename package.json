@@ -33,7 +33,7 @@
     "@maskito/angular": "^3.11.1",
     "@maskito/core": "^3.11.1",
     "@maskito/kit": "^3.11.1",
-    "file-type": "^21.0.0",
+    "file-type": "^21.1.0",
     "install": "^0.13.0",
     "ionicons": "^7.0.0",
     "jwt-decode": "^4.0.0",
