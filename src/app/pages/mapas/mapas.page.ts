@@ -9,8 +9,6 @@ import { NavController, ToastController, ViewDidEnter } from '@ionic/angular';
 import { Establishment } from '../establishment/models/establishment.type';
 import { firstValueFrom, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/module.d-CnjH8Dlt';
-import { Floor } from './models/floor.model';
-import { ShapeData } from './models/shape.model';
 import { Event } from '../event/models/event.type';
 import { eventsService } from '../event/event-services/event.service';
 
@@ -32,7 +30,7 @@ interface FloorData {
   styleUrls: ['./mapas.page.scss'],
   standalone: false
 })
-export class MapasPage implements OnInit, AfterViewInit {
+export class MapasPage implements OnInit {
   map!: google.maps.Map;
   floorManager!: FloorManager;
   static editMode: boolean = true;
@@ -59,7 +57,6 @@ export class MapasPage implements OnInit, AfterViewInit {
     private navCtrl: NavController
   ) {
     this.eventId = this.activatedRoute.snapshot.params['id_event'];
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'+this.eventId);
     this.establishmentId = this.activatedRoute.snapshot.params['id_establishment'];
     this.modo = this.activatedRoute.snapshot.params['modo'];
 
@@ -67,7 +64,7 @@ export class MapasPage implements OnInit, AfterViewInit {
     this.conteudoParams = nav?.extras.state?.['conteudo'];
 
     this.activatedRoute.queryParams.subscribe(params => {
-      this.mapaInserido = params['conteudo'];  // O JSON codificado
+      this.mapaInserido = params['conteudo'];
     });
 
     /*this.aleatorio = floor.shapes.markers.map(m => {
@@ -91,11 +88,10 @@ export class MapasPage implements OnInit, AfterViewInit {
     } else {
       MapasPage.editMode = true;
     }
-
   }
 
   recuperarZoomCenter(conteudo: string) {
-    
+
     const valores = JSON.parse(conteudo).map((f: any) => {
 
       console.log('f dentro do map:', f);
@@ -106,7 +102,7 @@ export class MapasPage implements OnInit, AfterViewInit {
           return { zoom: marker.zoom, center: marker.position };
         }
       }
-      return null; // Caso não encontre um marcador com 'centered: true'
+      return null;
     }).filter((item: any) => item !== null);
     this.zoomRecebido = valores.length === 0 ? 8 : valores[0].zoom;
     this.centerRecebido = valores.length === 0 ? { lat: -28.681528266431894, lng: -49.37356673246187 } : valores[0].center;
@@ -124,7 +120,6 @@ export class MapasPage implements OnInit, AfterViewInit {
             this.eventService.getById(this.eventId)
           );
           this.evt = response.event;
-          console.log('evento:'+this.evt);
           if (this.evt.map) {
             this.recuperarZoomCenter(this.evt.map);
           } else {
@@ -133,6 +128,7 @@ export class MapasPage implements OnInit, AfterViewInit {
             );
             this.est = response.facility;
             this.evt.map = this.est.map;
+            if (!this.est.map) this.est.map = JSON.stringify([{ name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },]);
             this.recuperarZoomCenter(this.evt.map);
           }
         } else {
@@ -140,6 +136,7 @@ export class MapasPage implements OnInit, AfterViewInit {
             this.establishmentService.getById(this.establishmentId)
           );
           this.est = response.facility;
+          if (!this.est.map) this.est.map = JSON.stringify([{ name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },]);
           this.recuperarZoomCenter(this.est.map);
         }
       } else {
@@ -149,9 +146,11 @@ export class MapasPage implements OnInit, AfterViewInit {
           );
           this.evt = response.event;
           this.evt.map = this.conteudoParams;
+          if (!this.est.map) this.est.map = JSON.stringify([{ name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },]);
           this.recuperarZoomCenter(this.evt.map);
         } else {
           this.est = { id: '', location: '', city: '', name: '', description: '', owner: '', photo: '', map: this.conteudoParams, image: '', public: 'PRIVATE' };
+          if (!this.est.map) this.est.map = JSON.stringify([{ name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },]);
           this.recuperarZoomCenter(this.est.map);
         }
       }
@@ -159,7 +158,11 @@ export class MapasPage implements OnInit, AfterViewInit {
       const err = error as HttpErrorResponse;
 
       const toast = await this.toastController.create({
-        message: err.error.message ?? '',
+        message: (err.error && typeof err.error === 'object' && 'message' in err.error
+          ? err.error.message
+          : typeof err.error === 'string'
+            ? err.error
+            : err.message) ?? 'Ocorreu um erro inesperado.',
         header: 'Erro ao carregar estabelecimento!',
         color: 'danger',
         duration: 3000,
@@ -172,11 +175,10 @@ export class MapasPage implements OnInit, AfterViewInit {
     if (MapasPage.editMode) {
       this.initDrawing();
     }
+    if (!this.est.map) {
+      this.est.map = '';
+    }
     this.floorManager = new FloorManager(this.map, this.router, this.establishmentId, this.eventId, this.establishmentService, this.eventService, this.toastController, this.est, this.evt, this.navCtrl);
-  }
-
-  async ngAfterViewInit() {
-
   }
 
   private initMap(): void {
@@ -189,10 +191,10 @@ export class MapasPage implements OnInit, AfterViewInit {
       styles: cleanMapStyle,
       restriction: MapasPage.editMode ? undefined : {
         latLngBounds: {
-          north: -28.681528266431894 + 0.000649, // norte
-          south: -28.681528266431894 - 0.000649, // sul
-          east: -49.37356673246187 + 0.000610,  // leste
-          west: -49.37356673246187 - 0.000610   // oeste
+          north: this.centerRecebido.lat + 0.000649, // norte
+          south: this.centerRecebido.lat - 0.000649, // sul
+          east: this.centerRecebido.lng + 0.000610,  // leste
+          west: this.centerRecebido.lng - 0.000610   // oeste
         },
         strictBounds: true
       }
@@ -350,7 +352,6 @@ export class MapasPage implements OnInit, AfterViewInit {
             },
           });
 
-          this.map.setCenter(userLatLng);
         } else {
           userMarker.setPosition(userLatLng);
         }
