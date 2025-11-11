@@ -131,11 +131,11 @@ export class InfoWindowService {
 	private static generateOnlyShowContent(data: { name: string, description: string }) {
 		return `
 			<div style="position:relative;display:flex;flex-direction:column;gap:4px;min-width:220px;overflow:visible;">
-				<div style="border:1px solid rgba(0,0,0,0.2);border-radius:6px;margin-top: 10px;padding:20px 8px 8px 8px;position:relative;box-sizing:border-box;overflow:visible;">
-					<span style="position:absolute;top:-10px;left:12px;background:white;padding:0 4px;font-size:14px;color:#333;white-space:nowrap;">
+				<div style="border: 1px solid black ;border-radius:6px;margin-top: 10px;padding:20px 8px 8px 8px;position:relative;box-sizing:border-box;overflow:visible;">
+					<span style="position:absolute;top:-10px;left:12px;color: #000000ff !important;background-color: #ffffffff !important;padding:0 4px;font-size:14px;color:#333;white-space:nowrap;">
 						${data.name ?? ''}
 					</span>
-					<div style="font-size:14px;color:#555;margin-top:4px;max-height:120px;overflow-y:auto;">
+					<div style="font-size:14px;color: #000000ff !important;margin-top:4px;max-height:120px;overflow-y:auto;">
 						${data.description ?? ""}
 					</div>
 				</div>

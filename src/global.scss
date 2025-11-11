@@ -64,3 +64,36 @@ ion-toast.toast-design {
   left: 50%; /* Centraliza horizontalmente */
   transform: translateX(-50%); /* Ajuste fino para garantir que o Toast fique centralizado */
 }
+.gm-style-iw {
+  background-color: #ffffff !important; 
+  color: #000000;
+}
+.gm-style-iw select{
+  background-color: #ffffff !important; 
+  color: #000000;
+}
+.gm-style-iw input{
+  background-color: #ffffff !important; 
+  color: #000000;
+}
+.gm-style-iw textarea{
+  background-color: #ffffff !important; 
+  color: #000000;
+}
+#centerContent button {
+  background-color: #6151516b !important;
+  color: #000000 !important;
+}
+.gm-ui-hover-effect:hover {
+  border: 2px solid #000000 !important; /* cor da borda */
+  // border-radius: 8px !important;        /* opcional */
+  box-sizing: content-box !important;    /* para manter o tamanho */
+  width: auto !important;
+  height: auto !important;   
+}
+
+.gm-ui-hover-effect span {
+  background-color: #000000 !important;
+
+  color: #000000 !important;  
+}
