@@ -22,7 +22,7 @@
 
   <div class="establishment-list">
     <ng-container *ngFor="let establishment of pesquisaEstablishment;">
-      <ion-card *ngIf="establishment.public === 'PUBLIC'" button [routerLink]="['details', establishment.id]">
+      <ion-card *ngIf="establishment.public === 'PUBLIC' && establishment.city === city" button [routerLink]="['details', establishment.id]">
         <div class="card-inner-wrapper">
 
           <div class="image-container">

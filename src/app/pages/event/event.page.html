@@ -22,7 +22,7 @@
 
   <div class="event-list">
     <ng-container *ngFor="let event of pesquisaEvent;">
-      <ion-card *ngIf="event.public === 'PUBLIC'" button [routerLink]="['details', event.id]">
+      <ion-card *ngIf="event.public === 'PUBLIC' && event.city === city" button [routerLink]="['details', event.id]">
 
         <div class="card-inner-wrapper">
 
