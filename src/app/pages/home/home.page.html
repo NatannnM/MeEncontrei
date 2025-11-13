@@ -16,13 +16,16 @@
       </div>
 
       <div class="cards-wrapper">
-        <div *ngFor="let establishment of establishmentList" class="item-card" [routerLink]="['establishmentDetails', establishment.id]">
-          <img class="item-card-image" [src]="establishment.image" [alt]="establishment.name" />
-          <div class="item-card-body">
-            <span class="item-card-tag item-card-tag--new">NOVO</span>
-            <p class="item-card-title">{{ establishment.name }}</p>
+        <ng-container *ngFor="let establishment of establishmentList">
+          <div *ngIf="establishment.public === 'PUBLIC' && establishment.city === city" class="item-card"
+            [routerLink]="['establishmentDetails', establishment.id]">
+            <img class="item-card-image" [src]="establishment.image" [alt]="establishment.name" />
+            <div class="item-card-body">
+              <span class="item-card-tag item-card-tag--new">NOVO</span>
+              <p class="item-card-title">{{ establishment.name }}</p>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </div>
 
@@ -33,14 +36,16 @@
       </div>
 
       <div class="cards-wrapper">
-        <div *ngFor="let event of eventList" class="item-card" [routerLink]="['eventDetails', event.id]">
-          <img class="item-card-image" [src]="event.image" [alt]="event.name" />
-          <div class="item-card-body">
-            <span class="item-card-tag item-card-tag--event">EVENTO</span>
-            <p class="item-card-title">{{ event.name }}</p>
-            <span class="item-card-price">R$ {{event.price}}</span>
+        <ng-container *ngFor="let event of eventList">
+          <div *ngIf="event.public === 'PUBLIC' && event.city === city" class="item-card" [routerLink]="['eventDetails', event.id]">
+            <img class="item-card-image" [src]="event.image" [alt]="event.name" />
+            <div class="item-card-body">
+              <span class="item-card-tag item-card-tag--event">EVENTO</span>
+              <p class="item-card-title">{{ event.name }}</p>
+              <span class="item-card-price">R$ {{event.price}}</span>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </div>
   </div>

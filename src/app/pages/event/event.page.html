@@ -21,25 +21,27 @@
 
 
   <div class="event-list">
-    <ion-card *ngFor="let event of pesquisaEvent;" button [routerLink]="['details', event.id]">
+    <ng-container *ngFor="let event of pesquisaEvent;">
+      <ion-card *ngIf="event.public === 'PUBLIC' && event.city === city" button [routerLink]="['details', event.id]">
 
-      <div class="card-inner-wrapper">
+        <div class="card-inner-wrapper">
 
-        <div class="image-container">
-          <img class="event-image" [alt]="event.name" [src]="event.image" />
+          <div class="image-container">
+            <img class="event-image" [alt]="event.name" [src]="event.image" />
+          </div>
+
+          <div class="event-content">
+            <ion-card-title>{{ event.name }}</ion-card-title>
+            <p class="event-description">
+              {{ event.info }}
+            </p>
+          </div>
+
+
+          <ion-icon class="card-action-icon" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
         </div>
-
-        <div class="event-content">
-          <ion-card-title>{{ event.name }}</ion-card-title>
-          <p class="event-description">
-            {{ event.info }}
-          </p>
-        </div>
-
-
-        <ion-icon class="card-action-icon" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
-      </div>
-    </ion-card>
+      </ion-card>
+    </ng-container>
   </div>
 
 </ion-content>

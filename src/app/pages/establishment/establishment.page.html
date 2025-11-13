@@ -21,25 +21,27 @@
 
 
   <div class="establishment-list">
-    <ion-card *ngFor="let establishment of pesquisaEstablishment;" button [routerLink]="['details', establishment.id]">
-      <div class="card-inner-wrapper">
+    <ng-container *ngFor="let establishment of pesquisaEstablishment;">
+      <ion-card *ngIf="establishment.public === 'PUBLIC' && establishment.city === city" button [routerLink]="['details', establishment.id]">
+        <div class="card-inner-wrapper">
 
-        <div class="image-container">
-          <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
+          <div class="image-container">
+            <img class="establishment-image" [alt]="establishment.name" [src]="establishment.image" />
+          </div>
+          <div class="establishment-content">
+
+            <ion-card-title>{{ establishment.name }}</ion-card-title>
+
+            <p class="establishment-description">
+              {{ establishment.description }}
+            </p>
+
+          </div>
+
+          <ion-icon class="card-action-icon" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
         </div>
-        <div class="establishment-content">
-
-          <ion-card-title>{{ establishment.name }}</ion-card-title>
-
-          <p class="establishment-description">
-            {{ establishment.description }}
-          </p>
-
-        </div>
-
-        <ion-icon class="card-action-icon" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
-      </div>
-    </ion-card>
+      </ion-card>
+    </ng-container>
   </div>
 
 </ion-content>
