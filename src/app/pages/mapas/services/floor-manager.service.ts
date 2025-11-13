@@ -89,11 +89,14 @@ export class FloorManager {
       if (this.controlDiv.contains(target)) return;
       this.closeSideBar();
     });
-    console.log(this.est);
+    const defaultFloors = JSON.stringify([
+      { name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },
+    ]);
+
     if (this.evt?.id) {
-      this.insertMapShapes(JSON.parse(this.evt.map));
+      this.insertMapShapes(JSON.parse(this.evt.map ?? defaultFloors));
     } else {
-      this.insertMapShapes(JSON.parse(this.est.map));
+      this.insertMapShapes(JSON.parse(this.est.map ?? defaultFloors));
     }
   }
 

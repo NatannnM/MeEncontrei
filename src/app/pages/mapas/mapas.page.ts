@@ -91,7 +91,6 @@ export class MapasPage implements OnInit {
   }
 
   recuperarZoomCenter(conteudo: string) {
-
     const valores = JSON.parse(conteudo).map((f: any) => {
 
       console.log('f dentro do map:', f);
@@ -128,7 +127,7 @@ export class MapasPage implements OnInit {
             );
             this.est = response.facility;
             this.evt.map = this.est.map;
-            if (!this.est.map) this.est.map = JSON.stringify([{ name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },]);
+            if (!this.evt.map) this.evt.map = JSON.stringify([{ name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },]);
             this.recuperarZoomCenter(this.evt.map);
           }
         } else {
@@ -146,7 +145,7 @@ export class MapasPage implements OnInit {
           );
           this.evt = response.event;
           this.evt.map = this.conteudoParams;
-          if (!this.est.map) this.est.map = JSON.stringify([{ name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },]);
+          if (!this.evt.map) this.evt.map = JSON.stringify([{ name: "T", shapes: { markers: [], circles: [], rectangles: [], polygons: [], polylines: [] } },]);
           this.recuperarZoomCenter(this.evt.map);
         } else {
           this.est = { id: '', location: '', city: '', name: '', description: '', owner: '', photo: '', map: this.conteudoParams, image: '', public: 'PRIVATE' };
@@ -175,8 +174,11 @@ export class MapasPage implements OnInit {
     if (MapasPage.editMode) {
       this.initDrawing();
     }
-    if (!this.est.map) {
+    if (this.est && !this.est?.map) {      
       this.est.map = '';
+    }
+    if (this.evt && !this.evt?.map) {
+      this.evt.map = '';
     }
     this.floorManager = new FloorManager(this.map, this.router, this.establishmentId, this.eventId, this.establishmentService, this.eventService, this.toastController, this.est, this.evt, this.navCtrl);
   }
