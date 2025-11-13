@@ -790,7 +790,10 @@ export class FloorManager {
 
   private addCurrentFloorShapes() {
     const shapes = this.floors[this.currentFloorIndex].shapes;
-    shapes.markers.forEach(m => m.mapObject.setMap(this.map));
+    shapes.markers.forEach(m => {
+      if (!MapasPage.editMode && m.centered) return;
+      m.mapObject.setMap(this.map);
+    });
     shapes.circles.forEach(c => c.mapObject.setMap(this.map));
     shapes.rectangles.forEach(r => r.mapObject.setMap(this.map));
     shapes.polygons.forEach(p => p.mapObject.setMap(this.map));
