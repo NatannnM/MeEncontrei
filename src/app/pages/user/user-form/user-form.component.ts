@@ -19,7 +19,7 @@ export class UserFormComponent  implements OnInit {
     email: new FormControl('', Validators.required),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     profile_pic: new FormControl(''),
-    role: new FormControl('', Validators.required),
+    role: new FormControl(''),
   });
 
   userId!: string;

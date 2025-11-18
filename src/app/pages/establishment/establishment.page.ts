@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Establishment } from './models/establishment.type';
 import { EstablishmentService } from './establishment-services/establishment.service';
 import { LocationService } from 'src/app/services/location.service';
+import { Storage } from '@ionic/storage-angular';
 @Component({
   selector: 'app-establishment',
   templateUrl: './establishment.page.html',
@@ -25,12 +26,13 @@ export class EstablishmentPage implements OnInit, ViewDidEnter {
     private router: Router,
     private establishmentService: EstablishmentService,
     private toastController: ToastController,
-    private locSv: LocationService
+    private locSv: LocationService,
+    private storage: Storage
   ) {
   }
 
   async ionViewDidEnter(): Promise<void> {
-    await this.detectCity();
+    this.city = await this.detectCity();
     this.establishmentService.getList().subscribe({
       next: (response) => {
         this.establishmentList = response.facility;
@@ -67,22 +69,13 @@ export class EstablishmentPage implements OnInit, ViewDidEnter {
   ngOnInit() { }
 
   async detectCity() {
-    this.loading = true;
-    this.error = null;
-    try {
-      const city = await this.locSv.getCityFromBrowser(12000); // Pega a cidade
-      this.city = city;
-      console.log('CIDADE RECUPERADA:' + this.city);
-      if (!this.city) {
-        this.error = 'Não foi possível identificar a cidade a partir das coordenadas.';
-      }
-    } catch (err: any) {
-      console.error(err);
-      if (err?.code === 1) this.error = 'Permissão negada para acessar localização.';
-      else if (err?.code === 3) this.error = 'Tempo de obtenção esgotado (timeout).';
-      else this.error = err?.message ?? 'Erro ao obter localização.';
-    } finally {
-      this.loading = false;
+    const city = await this.storage.get('city');
+    if (city) {
+      console.log('Cidade recuperada do storage:', city);
+      return city;
+    } else {
+      console.log('Cidade não encontrada no storage.');
+      return null;
     }
   }
 

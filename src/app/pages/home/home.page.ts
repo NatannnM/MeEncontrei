@@ -6,6 +6,7 @@ import { ViewDidEnter } from '@ionic/angular';
 import { Event } from '../event/models/event.type';
 import { eventsService } from '../event/event-services/event.service';
 import { LocationService } from 'src/app/services/location.service';
+import { Storage } from '@ionic/storage-angular';
 
 interface CardItem {
   title: string;
@@ -31,13 +32,20 @@ export class HomePage implements ViewDidEnter {
     private router: Router,
     private establishmentService: EstablishmentService,
     private eventService: eventsService,
-    private locSv: LocationService
+    private locSv: LocationService,
+    private storage: Storage
   ) {
   
    }
 
   async ionViewDidEnter(): Promise<void> {
-    await this.detectCity();
+    this.city = await this.storage.get('city');
+    if(!this.city){
+      await this.detectCity();
+    } else {
+      console.log('Cidade recuperada do storage:', this.city);
+    }
+    
     this.establishmentService.getList().subscribe({
       next: (response) => {
         this.establishmentList = response.facility;
@@ -75,6 +83,8 @@ export class HomePage implements ViewDidEnter {
       console.log('CIDADE RECUPERADA:'+this.city);
       if (!this.city) {
         this.error = 'Não foi possível identificar a cidade a partir das coordenadas.';
+      }else{
+        await this.storage.set('city', this.city);
       }
     } catch (err: any) {
       console.error(err);
