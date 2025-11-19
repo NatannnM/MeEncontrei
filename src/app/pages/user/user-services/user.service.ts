@@ -52,6 +52,7 @@ export class userService{
     }
 
     private add(user: User): Observable<any>{
+        user.role = 'USER';
         return from(this.authService.getToken()).pipe(
             switchMap(token => {
                 if(!token){
@@ -78,7 +79,6 @@ export class userService{
     }
 
     save(user: User){
-        console.log("ID DO USUARIO",user.id);
         return user.id ? this.update(user) : this.add(user);
     }
 
